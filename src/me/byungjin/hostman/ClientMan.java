@@ -10,7 +10,7 @@ import me.byungjin.hostman.events.ConnectionInputEvent;
 import me.byungjin.manager.ENVIRONMENT;
 import me.byungjin.manager.SystemManager;
 
-public class ClientMan extends Thread{	
+public class ClientMan extends Thread implements Man{	
 	private Socket sock;
 	private String ip;
 	private String nick;
@@ -30,7 +30,7 @@ public class ClientMan extends Thread{
 			throw new Exception("This socket is empty!");
 		
 		this.reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-		this.writer = new PrintWriter(sock.getOutputStream());
+		this.writer = new PrintWriter(sock.getOutputStream(), true);
 	}
 	/**
 	 * 상대방에게 cut을 보내고, 연결을 중지합니다.
@@ -51,11 +51,7 @@ public class ClientMan extends Thread{
 		} catch (IOException e) {
 			SystemManager.catchException(ENVIRONMENT.CLIENTMAN, e);
 		}	
-	}
-	public void send(short tag, String data) {
-		if(sock.isConnected())
-			writer.write(tag + " " + data);
-	}
+	}	
 	
 	public void setConnectionInputEvent(ConnectionInputEvent hostInputEvent) {
 		this.hostInputEvent = hostInputEvent;
@@ -67,13 +63,31 @@ public class ClientMan extends Thread{
 		SystemManager.message(":Client Open!");
 		try {
 			while(sock.isConnected()) {					
-				if((data = reader.readLine()) != null);
+				if((data = reader.readLine()) != null) {
+					SystemManager.message(":Server " + data);
 					if(hostInputEvent != null) hostInputEvent.dispatch(this, data);
+				}
+					
 			}
 		}catch (Exception e) { 			
 			SystemManager.catchException(ENVIRONMENT.CLIENTMAN, e);
 			end();
 		}
 		SystemManager.message(":Client End!");
+	}
+	@Override
+	public void sendNick() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void send(short tag, String data) {		
+		if(sock.isConnected()) {			
+			writer.println(tag + " " + data);
+		}						
+	}
+	@Override
+	public void work() {
+		start();
 	}	
 }

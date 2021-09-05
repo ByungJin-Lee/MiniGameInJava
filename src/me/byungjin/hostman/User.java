@@ -29,7 +29,7 @@ public class User extends Thread{
 			throw new Exception("This user's Socket is empty!");		
 		
 		this.reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-		this.writer = new PrintWriter(sock.getOutputStream());
+		this.writer = new PrintWriter(sock.getOutputStream(), true);
 	}
 	/**
 	 * 상대방에게 cut을 보내고, 연결을 중지합니다.
@@ -54,23 +54,25 @@ public class User extends Thread{
 		}		
 	}	
 	public void send(short tag, String data) {
-		if(sock.isConnected())
-			writer.write(tag + " " + data);
+		if(sock.isConnected()) {			
+			writer.println(tag + " " + data);
+		}			
 	}
 	
 	@Override
 	public void run() {
 		String data;
 		try {
-			while(sock.isConnected()) {						
+			while(sock.isConnected()) {
 				if((data = reader.readLine()) != null) {
+					System.out.println(data);
 					HostMan.onGetDataFromUser(this, data);
 					if(Short.parseShort(data.split(" ")[0]) == ENVIRONMENT.TAG_CONNECTION_CUT)
 						end();
-				}				
-			} 
+				}
+			}
 		}
-		catch (Exception e) { 
+		catch (Exception e) {
 			SystemManager.catchException(ENVIRONMENT.USER, e);
 			end();
 		}

@@ -13,7 +13,8 @@ import me.byungjin.manager.ENVIRONMENT;
 import me.byungjin.manager.SystemManager;
 import me.byungjin.hostman.events.ConnectionInputEvent;
 
-public class HostMan extends Thread{
+public class HostMan extends Thread implements Man{
+	private String nick;
 	private int identify;
 	private ServerSocket sockServ;
 	private boolean running;
@@ -53,7 +54,7 @@ public class HostMan extends Thread{
 	/**
 	 * User들에서 해당 유저 삭제
 	 */
-	static public void removeUserInHost(User target) {
+	static public void removeUserInHost(User target) {		
 		users.removeElement(target);
 		if(userConnectionEndEvent != null)
 			userConnectionEndEvent.dispatch(target);
@@ -62,6 +63,7 @@ public class HostMan extends Thread{
 	 * 데이터가 들어오는 경우 호출됨
 	 */
 	static public void onGetDataFromUser(User user, String data) {
+		SystemManager.message("GUEST"+ user.getIdentify() + " > " + data);
 		if(userInputEvent != null)
 			userInputEvent.dispatch(user, data);
 	}
@@ -118,13 +120,22 @@ public class HostMan extends Thread{
 		for(User u : users) {
 			u.cut();
 		}
+	}		
+	@Override
+	public void sendNick() {		
+		send(ENVIRONMENT.NICK, nick);
 	}
 	/**
 	 * User에게 모두 데이터 전송
 	 */
-	public void sendData(short tag, String data) {
+	@Override
+	public void send(short tag, String data) {		
 		for(User u : users) {
 			u.send(tag, data);
 		}
+	}
+	@Override
+	public void work() {
+		start();
 	}
 }
