@@ -13,18 +13,20 @@ public class MiniGame {
 	
 	public MiniGame() throws Exception {		
 		scn = new Scanner(System.in);
-		System.out.println("H : 0 / C : 1");
-		
-		
+		System.out.print("Input Your Name : ");
+		String nick = scn.next();		
+		System.out.println("Do you want to Start H : 0 / C : 1 ?");						
 		switch(scn.nextInt()) {
 		case 0:
 			man = new HostMan();
 			break;
 		case 1:
-			man = new ClientMan("localhost");
+			System.out.print("IP : ");
+			man = new ClientMan(scn.next());
 			break;
 		}
 		man.work();
+		man.setNick(nick);
 		new ReadyFrame();
 	}
 	

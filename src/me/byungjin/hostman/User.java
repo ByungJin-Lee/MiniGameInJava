@@ -58,18 +58,20 @@ public class User extends Thread{
 			writer.println(tag + " " + data);
 		}			
 	}
+	public String getNick() {
+		return nick;
+	}
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
 	
 	@Override
 	public void run() {
 		String data;
 		try {
 			while(sock.isConnected()) {
-				if((data = reader.readLine()) != null) {
-					System.out.println(data);
-					HostMan.onGetDataFromUser(this, data);
-					if(Short.parseShort(data.split(" ")[0]) == ENVIRONMENT.TAG_CONNECTION_CUT)
-						end();
-				}
+				if((data = reader.readLine()) != null)
+					HostMan.onGetDataFromUser(this, data);									
 			}
 		}
 		catch (Exception e) {

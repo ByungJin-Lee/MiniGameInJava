@@ -30,9 +30,10 @@ public class HostMan extends Thread implements Man{
 	/**
 	 * 소켓 생성 및 멤버 초기화
 	 */
-	public HostMan() throws Exception {		
+	public HostMan() throws Exception {
 		identify = 0;
-		sockServ = new ServerSocket(ENVIRONMENT.PORT);		
+		sockServ = new ServerSocket(ENVIRONMENT.PORT);
+		userInputEvent = new DefaultUserInputListener(this);
 	}	
 	/**
 	 * @return String - Host의 주소 반환
@@ -63,9 +64,9 @@ public class HostMan extends Thread implements Man{
 	 * 데이터가 들어오는 경우 호출됨
 	 */
 	static public void onGetDataFromUser(User user, String data) {
-		SystemManager.message("GUEST"+ user.getIdentify() + " > " + data);
+		SystemManager.message("GUEST"+ user.getIdentify() + " > " + data);			
 		if(userInputEvent != null)
-			userInputEvent.dispatch(user, data);
+			userInputEvent.dispatch(user, data);		
 	}
 	
 	//Register
@@ -85,7 +86,7 @@ public class HostMan extends Thread implements Man{
 			while(running && !sockServ.isClosed()) {			
 				Socket sock = sockServ.accept();
 				User user = new User(sock, identify++);				
-				user.start();				
+				user.start();	
 				//append User
 				users.add(user);
 				//dispatchEvent				
@@ -121,10 +122,6 @@ public class HostMan extends Thread implements Man{
 			u.cut();
 		}
 	}		
-	@Override
-	public void sendNick() {		
-		send(ENVIRONMENT.NICK, nick);
-	}
 	/**
 	 * User에게 모두 데이터 전송
 	 */
@@ -135,7 +132,23 @@ public class HostMan extends Thread implements Man{
 		}
 	}
 	@Override
+	public void chat(String data) {
+		for(User u : users) {
+			u.send(ENVIRONMENT.CHAT, nick + " " + data);
+		}
+	}
+	public void sendExceptThisUser(User user, short tag, String data) {
+		for(User u: users) {
+			if(u == user) continue;
+			u.send(tag, data);
+		}
+	}
+	@Override
 	public void work() {
 		start();
+	}
+	@Override
+	public void setNick(String nick) {
+		this.nick = nick;
 	}
 }

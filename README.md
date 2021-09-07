@@ -32,3 +32,12 @@ SE 15
         + ReadyFrame
     + fixed bug
         + writer.write -> writer.println
+   
++ 1.0.3
+    + improved Man Interface
+        + removed sendNick method
+        + created chat method
+    + improved SystemManage        
+    + created Class for interaction
+        + DefaultHostInputListener
+        + DefaultUserInputListener   

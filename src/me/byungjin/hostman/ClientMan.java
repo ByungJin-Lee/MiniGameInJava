@@ -24,7 +24,8 @@ public class ClientMan extends Thread implements Man{
 	 * @param sock
 	 * @throws Exception
 	 */
-	public ClientMan(String ip) throws Exception {		
+	public ClientMan(String ip) throws Exception {
+		this.hostInputEvent = new DefaultHostInputListener();
 		sock = new Socket(ip, ENVIRONMENT.PORT);
 		if(this.sock == null) 			
 			throw new Exception("This socket is empty!");
@@ -56,7 +57,9 @@ public class ClientMan extends Thread implements Man{
 	public void setConnectionInputEvent(ConnectionInputEvent hostInputEvent) {
 		this.hostInputEvent = hostInputEvent;
 	}
-	
+	public String getNick() {		
+		return nick;
+	}
 	@Override
 	public void run() {
 		String data;
@@ -76,11 +79,6 @@ public class ClientMan extends Thread implements Man{
 		SystemManager.message(":Client End!");
 	}
 	@Override
-	public void sendNick() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
 	public void send(short tag, String data) {		
 		if(sock.isConnected()) {			
 			writer.println(tag + " " + data);
@@ -89,5 +87,14 @@ public class ClientMan extends Thread implements Man{
 	@Override
 	public void work() {
 		start();
+	}		
+	@Override
+	public void setNick(String nick) {
+		this.nick = nick;
+		send(ENVIRONMENT.NICK, nick);
+	}
+	@Override
+	public void chat(String data) {
+		send(ENVIRONMENT.CHAT, data);		
 	}	
 }

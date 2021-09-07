@@ -20,8 +20,7 @@ public class ChatSendActionListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {		
 		if(field != null && MiniGame.man != null) {			
-			MiniGame.man.send(ENVIRONMENT.CHAT, field.getText());
+			MiniGame.man.chat(field.getText());
 		}
-					
 	}	
 }
