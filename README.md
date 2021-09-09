@@ -40,4 +40,21 @@ SE 15
     + improved SystemManage        
     + created Class for interaction
         + DefaultHostInputListener
-        + DefaultUserInputListener   
+        + DefaultUserInputListener  
+
++ 1.0.4
+    + removed package
+        + remove Host
+        + remove Client
+        + remove User
+        + remove Kind
+        + remove Events
+    + created DBConnection
+        + Mysql jdbc
+        + maked basic query
+    + created package
+        + telecommunication 
+        + events
+        + Promise
+    + improved ENVIRONMENT
+        + read Env.txt File
