@@ -58,3 +58,38 @@ SE 15
         + Promise
     + improved ENVIRONMENT
         + read Env.txt File
+
++ 1.1.0
+    + create package
+        + me.byungjin.database
+        + me.byungjin.minigame.gui
+            + item
+            + item.banner
+            + item.menu
+            + page
+            + panel
+            + actionlistener
+    + create GUI Class
+        + BannerPanel
+        + ControlPanel
+        + InnerPanel
+        + MenuPanel
+        + MasterWindow
+        + ClientBanner
+        + ConnectionLogBanner
+        + DBLogBanner
+        + ServerLogBanner
+        + ServerStatusBanner
+        + TotalLogBanner
+        + LogMenu
+        + MonitorMenu
+        + SettingMenu
+    + create DB Class
+        + LogSchema
+        + UserSchema
+    + read Assets
+        + Font
+        + Icons
+    + success DB Connection
+        + login
+        + log
