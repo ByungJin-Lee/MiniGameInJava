@@ -4,7 +4,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Vector;
 
-import me.byungjin.manager.Environment;
+import me.byungjin.manager.ENVIRONMENT;
 import me.byungjin.manager.SystemManager;
 import me.byungjin.telecommnuication.event.ClientEvent;
 import me.byungjin.telecommnuication.event.DataComeInEvent;
@@ -23,7 +23,7 @@ public class Server extends Thread implements Agent {
 	
 	public Server(DataComeInEvent event, String nick) throws Exception {		
 		this.nick = nick;
-		sockServ = new ServerSocket(nick == null ? Environment.SERVER_PORT : Environment.PORT);
+		sockServ = new ServerSocket(nick == null ? ENVIRONMENT.SERVER_PORT.getValue() : ENVIRONMENT.PORT.getValue());
 		clients = new Vector<Client>();
 		dataComeInEvent = event;
 		identify = 0;
@@ -40,7 +40,7 @@ public class Server extends Thread implements Agent {
 				if(clientEnterEvt != null) clientEnterEvt.dispatch(client);
 				identify++;
 			}catch(Exception e) {
-				SystemManager.catchException(Environment.SERVER, e);
+				SystemManager.catchException(ENVIRONMENT.SERVER, e);
 			}
 		}
 		
@@ -59,7 +59,7 @@ public class Server extends Thread implements Agent {
 	}
 	@Override
 	public void chat(String str) {
-		send(Promise.CHAT, nick + " " + str);
+		send(PROMISE.CHAT, nick + " " + str);
 	}
 	@Override
 	public void work() {

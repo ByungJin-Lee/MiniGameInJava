@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import me.byungjin.manager.Environment;
+import me.byungjin.manager.ENVIRONMENT;
 import me.byungjin.manager.SystemManager;
 
 public class DBConnection {
@@ -25,12 +25,12 @@ public class DBConnection {
 	public DBConnection() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");		
-			conn = DriverManager.getConnection("jdbc:mysql://" + Environment.DB_IP + ":" + Environment.DB_PORT + "/jmini", Environment.DB_ID, Environment.DB_PW);
+			conn = DriverManager.getConnection("jdbc:mysql://" + ENVIRONMENT.DB_IP + ":" + ENVIRONMENT.DB_PORT + "/jmini", ENVIRONMENT.DB_ID, ENVIRONMENT.DB_PW);
 			smt = conn.createStatement();
 			isConnect = true;
-			SystemManager.message(Environment.DB, "DB Connection Success!!");
+			SystemManager.message(ENVIRONMENT.DB, "Connection Success!!");
 		}catch(Exception e) {
-			SystemManager.catchException(Environment.DB, e);
+			SystemManager.catchException(ENVIRONMENT.DB, e);
 		}
 	}
 	/**
@@ -43,11 +43,11 @@ public class DBConnection {
 		try {
 			rs = smt.executeQuery(sql);			
 			if(rs.next() && rs.getInt(1) > 0) {
-				SystemManager.message(Environment.DB, "check User(" + id +")");
+				SystemManager.message(ENVIRONMENT.DB, "check User(" + id +")");
 				return true;
 			}		
 		} catch (SQLException e) {
-			SystemManager.catchException(Environment.DB, e);			
+			SystemManager.catchException(ENVIRONMENT.DB, e);			
 		}		
 		return false;		
 	}
@@ -62,11 +62,11 @@ public class DBConnection {
 		try {
 			rs = smt.executeQuery(sql);
 			if(rs.getInt(1) > 0) {
-				SystemManager.message(Environment.DB, "login User(" + id + ", " + password + ")");
+				SystemManager.message(ENVIRONMENT.DB, "login User(" + id + ", " + password + ")");
 				return true;
 			}			
 		} catch (SQLException e) {
-			SystemManager.catchException(Environment.DB, e);			
+			SystemManager.catchException(ENVIRONMENT.DB, e);			
 		}		
 		return false;
 	}	
@@ -83,11 +83,11 @@ public class DBConnection {
 			pstm.setString(1, id);
 			pstm.setString(2, password);
 			if(pstm.executeUpdate() > 0) {
-				SystemManager.message(Environment.DB, "new User(" + id + ", " + password + ")");
+				SystemManager.message(ENVIRONMENT.DB, "new User(" + id + ", " + password + ")");
 				return true;
 			}
 		} catch (SQLException e) {
-			SystemManager.catchException(Environment.DB, e);			
+			SystemManager.catchException(ENVIRONMENT.DB, e);			
 		}		
 		return false;
 	}
@@ -97,11 +97,11 @@ public class DBConnection {
 	 * @param str
 	 * @param warning
 	 */
-	public void log(short tag, String str, boolean warning) {
+	public void log(ENVIRONMENT tag, String str, boolean warning) {
 		String sql = "INSERT INTO Log (Source, Content, Warning) VALUES (?,?,?)";
 		try {
 			pstm = conn.prepareStatement(sql);
-			pstm.setShort(1, tag);
+			pstm.setString(1, tag.toString());
 			pstm.setString(2, str);
 			pstm.setBoolean(3, warning);
 			pstm.executeUpdate();
@@ -118,9 +118,9 @@ public class DBConnection {
 		try {
 			rs = smt.executeQuery("SELECT * From Log");			
 			while(rs.next())
-				logs.add(new LogSchema(rs.getShort(1),  rs.getString(2), rs.getBoolean(3), rs.getTime(4)));			
+				logs.add(new LogSchema(rs.getString(1),  rs.getString(2), rs.getBoolean(3), rs.getTime(4)));			
 		} catch (SQLException e) {
-			SystemManager.catchException(Environment.DB, e);			
+			SystemManager.catchException(ENVIRONMENT.DB, e);			
 		}
 		return logs;		
 	}
@@ -136,9 +136,9 @@ public class DBConnection {
             	smt.close();            
             if(rs != null && !rs.isClosed())
                 rs.close();            
-            SystemManager.message(Environment.DB, "DB Connection Close!!");            
+            SystemManager.message(ENVIRONMENT.DB, "Connection Close!!");            
 		}catch(Exception e){			
-			SystemManager.catchException(Environment.DB, e);
+			SystemManager.catchException(ENVIRONMENT.DB, e);
 		}
 	}
 }

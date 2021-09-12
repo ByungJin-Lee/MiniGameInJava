@@ -28,6 +28,8 @@ public class AssetManager {
 	static public ImageIcon ICON_SETTING_SELECTED;	
 	static public ImageIcon ICON_SWITCH_ON;
 	static public ImageIcon ICON_SWITCH_OFF;
+	static public ImageIcon ICON_WHITE_STONE;
+	static public ImageIcon ICON_BLACK_STONE;
 	
 	static public void init() {
 		readFont();
@@ -57,6 +59,13 @@ public class AssetManager {
 		ICON_SWITCH_ON= new ImageIcon(Toolkit.getDefaultToolkit().createImage(AssetManager.class.getResource("../../../assets/icons/icon_switch_on.png")).getScaledInstance(25, 25, Image.SCALE_SMOOTH));
 		ICON_SWITCH_OFF= new ImageIcon(Toolkit.getDefaultToolkit().createImage(AssetManager.class.getResource("../../../assets/icons/icon_switch_off.png")).getScaledInstance(25, 25, Image.SCALE_SMOOTH));
 	}	
+	static public void readOmokIcons() {
+		ICON_WHITE_STONE = new ImageIcon(Toolkit.getDefaultToolkit().createImage(AssetManager.class.getResource("../../../assets/game/white.png")).getScaledInstance(35, 35, Image.SCALE_SMOOTH));
+		ICON_BLACK_STONE = new ImageIcon(Toolkit.getDefaultToolkit().createImage(AssetManager.class.getResource("../../../assets/game/black.png")).getScaledInstance(35, 35, Image.SCALE_SMOOTH));
+	}
+	static public Image readBoard() {
+		return new ImageIcon(AssetManager.class.getResource("../../../assets/game/baduk_board.png")).getImage();
+	}
 	/**
 	 * IP 등 환경 설정 파일을 읽을(파일이 없는 경우 기본 파일 생성)
 	 * @param 
@@ -74,7 +83,7 @@ public class AssetManager {
 				return false;
 			}
 		}catch(Exception e) {
-			SystemManager.catchException(Environment.ASSETSMANAGER, e);
+			SystemManager.catchException(ENVIRONMENT.ASSETSMANAGER, e);
 			return false;
 		}		
 	}
@@ -93,22 +102,22 @@ public class AssetManager {
 	 */
 	static private void readEnv(boolean admin) throws Exception {
 		BufferedReader reader = new BufferedReader(new FileReader(env));
-		Environment.SERVER_IP = reader.readLine();		
-		Environment.SERVER_IP = Environment.SERVER_IP.substring(Environment.SERVER_IP.indexOf("=") + 1);
+		ENVIRONMENT.SERVER_IP = reader.readLine();		
+		ENVIRONMENT.SERVER_IP = ENVIRONMENT.SERVER_IP.substring(ENVIRONMENT.SERVER_IP.indexOf("=") + 1);
 		
 		if(!admin) {
 			reader.close();
 			return;
 		}
 		
-		Environment.DB_IP = reader.readLine();
-		Environment.DB_IP = Environment.DB_IP.substring(Environment.DB_IP.indexOf("=") + 1);
-		Environment.DB_PORT = reader.readLine();
-		Environment.DB_PORT = Environment.DB_PORT.substring(Environment.DB_PORT.indexOf("=") + 1);
-		Environment.DB_ID = reader.readLine();
-		Environment.DB_ID = Environment.DB_ID.substring(Environment.DB_ID.indexOf("=") + 1);
-		Environment.DB_PW = reader.readLine();		
-		Environment.DB_PW = Environment.DB_PW.substring(Environment.DB_PW.indexOf("=") + 1);
+		ENVIRONMENT.DB_IP = reader.readLine();
+		ENVIRONMENT.DB_IP = ENVIRONMENT.DB_IP.substring(ENVIRONMENT.DB_IP.indexOf("=") + 1);
+		ENVIRONMENT.DB_PORT = reader.readLine();
+		ENVIRONMENT.DB_PORT = ENVIRONMENT.DB_PORT.substring(ENVIRONMENT.DB_PORT.indexOf("=") + 1);
+		ENVIRONMENT.DB_ID = reader.readLine();
+		ENVIRONMENT.DB_ID = ENVIRONMENT.DB_ID.substring(ENVIRONMENT.DB_ID.indexOf("=") + 1);
+		ENVIRONMENT.DB_PW = reader.readLine();		
+		ENVIRONMENT.DB_PW = ENVIRONMENT.DB_PW.substring(ENVIRONMENT.DB_PW.indexOf("=") + 1);
 		reader.close();
 	}	
 	/**
@@ -117,18 +126,18 @@ public class AssetManager {
 	static public void saveEnv(boolean admin) {
 		try {
 			PrintWriter writer = new PrintWriter(new FileWriter(env));
-			writer.println("SERVER_IP=" + Environment.SERVER_IP);
+			writer.println("SERVER_IP=" + ENVIRONMENT.SERVER_IP);
 			if(!admin) {				
 				writer.close();
 				return;
 			}
-			writer.println("DB_IP=" + Environment.DB_IP);
-			writer.println("DB_PORT=" + Environment.DB_PORT);
-			writer.println("DB_ID=" + Environment.DB_ID);
-			writer.println("DB_PW=" + Environment.DB_PW);
+			writer.println("DB_IP=" + ENVIRONMENT.DB_IP);
+			writer.println("DB_PORT=" + ENVIRONMENT.DB_PORT);
+			writer.println("DB_ID=" + ENVIRONMENT.DB_ID);
+			writer.println("DB_PW=" + ENVIRONMENT.DB_PW);
 			writer.close();
 		}catch(Exception e) {
-			SystemManager.catchException(Environment.ASSETSMANAGER, e);
+			SystemManager.catchException(ENVIRONMENT.ASSETSMANAGER, e);
 		}
 	}
 }

@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import me.byungjin.manager.Environment;
+import me.byungjin.manager.ENVIRONMENT;
 import me.byungjin.manager.SystemManager;
 import me.byungjin.telecommnuication.event.DataComeInEvent;
 
@@ -20,12 +20,12 @@ public class Client extends Thread implements Agent {
 	
 	//for Access Server
 	public Client(DataComeInEvent event) throws Exception {
-		sock = new Socket(Environment.SERVER_IP, Environment.SERVER_PORT);		
+		sock = new Socket(ENVIRONMENT.SERVER_IP, ENVIRONMENT.SERVER_PORT.getValue());		
 		init(event);
 	}
 	//for Access Host
 	public Client(String ip, DataComeInEvent event) throws Exception{
-		sock = new Socket(ip, Environment.PORT);
+		sock = new Socket(ip, ENVIRONMENT.PORT.getValue());
 		init(event);
 	}
 	//used in Server
@@ -46,7 +46,7 @@ public class Client extends Thread implements Agent {
 			reader.close();
 			sock.close();
 		}catch(Exception e) {			
-			SystemManager.catchException(Environment.GUEST, e);
+			SystemManager.catchException(ENVIRONMENT.CLIENT, e);
 		}
 	}		
 	public int getIdentify() {
@@ -61,7 +61,7 @@ public class Client extends Thread implements Agent {
 					dataComeInEvent.dispatch(this, buffer);
 			}							
 		}catch(Exception e) {
-			SystemManager.catchException(Environment.GUEST, e);
+			SystemManager.catchException(ENVIRONMENT.CLIENT, e);
 		}
 	}
 	
@@ -75,7 +75,7 @@ public class Client extends Thread implements Agent {
 	}
 	@Override
 	public void chat(String str) {
-		send(Promise.CHAT, nick + " " +str);
+		send(PROMISE.CHAT, nick + " " +str);
 	}
 	@Override
 	public void work() {

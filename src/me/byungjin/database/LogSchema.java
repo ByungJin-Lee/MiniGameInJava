@@ -4,19 +4,19 @@ import java.sql.Time;
 
 public class LogSchema {	
 	
-	public LogSchema(Short source, String content, boolean warning,  Time time) {
+	public LogSchema(String source, String content, boolean warning,  Time time) {
 		this.source = source;
 		this.warning = warning;
 		this.content = content;
 		this.time = time;
 	}
 	
-	private Short source;
+	private String source;
 	private boolean warning;
 	private String content;
 	private Time time;
 	
-	public Short getSource() {
+	public String getSource() {
 		return source;
 	}
 

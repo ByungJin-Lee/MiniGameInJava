@@ -93,3 +93,17 @@ SE 15
     + success DB Connection
         + login
         + log
+
++ 1.1.1
+    + created Default Omok package
+        + Board
+        + Omok
+        + Stone
+        + StoneType
+    + created Omok Gui
+        + Omok Window
+        + Omok Panel
+    + improved Environment
+        + change Static value to Enum
+    + changed DB Source value type
+        + small int to varchar(15)

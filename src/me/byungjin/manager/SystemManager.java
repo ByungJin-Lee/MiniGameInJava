@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import me.byungjin.database.DBConnection;
 import me.byungjin.database.LogSchema;
 import me.byungjin.minigame.gui.MasterWindow;
+import me.byungjin.minigame.gui.OmokWindow;
 
 public class SystemManager {	
 	static private DBConnection conn;
@@ -16,9 +17,9 @@ public class SystemManager {
 				AssetManager.getEnv(true); 								
 			else 
 				AssetManager.getEnv(false);			
-			new MasterWindow();
+			new OmokWindow();
 		}catch(Exception e){
-			catchException(Environment.SYSTEM, e);
+			catchException(ENVIRONMENT.SYSTEM, e);
 		}			
 	}
 	
@@ -35,16 +36,16 @@ public class SystemManager {
 			return conn.getLog();
 		return null;
 	}	
-	static public void catchException(short tag, Exception e) {		
+	static public void catchException(ENVIRONMENT tag, Exception e) {		
 		System.out.println(tag + " - " + e.getMessage());
 		e.printStackTrace();
 		log(tag, e.getMessage(), true);
 	}
-	static public void message(short tag, String str) {
+	static public void message(ENVIRONMENT tag, String str) {
 		System.out.println(":" + tag + " - " + str);
 		log(tag, str, false);
 	}	
-	static private void log(short tag, String str, boolean warning) {
+	static private void log(ENVIRONMENT tag, String str, boolean warning) {
 		if(conn != null && conn.isConnect) {
 			conn.log(tag, str, warning);
 		}

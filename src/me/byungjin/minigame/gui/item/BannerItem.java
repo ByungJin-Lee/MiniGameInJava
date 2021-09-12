@@ -2,7 +2,7 @@ package me.byungjin.minigame.gui.item;
 
 import java.awt.Color;
 
-import me.byungjin.manager.Environment;
+import me.byungjin.manager.ENVIRONMENT;
 import me.byungjin.manager.SystemManager;
 
 public abstract class BannerItem extends Item {
@@ -25,6 +25,6 @@ public abstract class BannerItem extends Item {
 	}
 	@Override
 	public void afterSelected() {		
-		SystemManager.message(Environment.M_SERVER, getText() + " was Clicked.");
+		SystemManager.message(ENVIRONMENT.SERVER, getText() + " was Clicked.");
 	}
 }

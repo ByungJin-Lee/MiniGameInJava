@@ -25,7 +25,7 @@ public class TotalLogPage extends JTable {
 		
 		for(LogSchema l : logs) {
 			row = new Vector<>();
-			row.add(Short.toString(l.getSource()));
+			row.add(l.getSource());
 			row.add(Boolean.toString(l.isWarning()));
 			row.add(l.getContent());
 			row.add(l.getTime().toLocalTime().toString());
