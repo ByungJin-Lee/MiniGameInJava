@@ -107,3 +107,6 @@ SE 15
         + change Static value to Enum
     + changed DB Source value type
         + small int to varchar(15)
+   
++ 1.1.2
+    + renamed packages

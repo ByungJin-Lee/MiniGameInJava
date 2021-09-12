@@ -2,10 +2,10 @@ package me.byungjin.manager;
 
 import java.util.ArrayList;
 
-import me.byungjin.database.DBConnection;
-import me.byungjin.database.LogSchema;
-import me.byungjin.minigame.gui.MasterWindow;
-import me.byungjin.minigame.gui.OmokWindow;
+import me.byungjin.db.DBConnection;
+import me.byungjin.db.LogSchema;
+import me.byungjin.game.gui.MasterWindow;
+import me.byungjin.game.gui.OmokWindow;
 
 public class SystemManager {	
 	static private DBConnection conn;
