@@ -1,8 +1,10 @@
 package me.byungjin.game.omock;
 
 public class Omok extends BadukBoard {
-	public Omok() {
+	private boolean running = false;
+	public Omok() {		
 		super();
+		running = true;
 	}
 	
 	public boolean checkWin(int x, int y) {
@@ -11,9 +13,10 @@ public class Omok extends BadukBoard {
 		if(countStonesWithDirection(x, y, 1, 1, placedType) + countStonesWithDirection(x, y, -1, -1, placedType) == 4
 				|| countStonesWithDirection(x, y, -1, 1, placedType) + countStonesWithDirection(x, y, 1, -1, placedType) == 4
 				|| countStonesWithDirection(x, y, 0, 1, placedType) + countStonesWithDirection(x, y, 0, -1, placedType) == 4
-				|| countStonesWithDirection(x, y, 1, 0, placedType) + countStonesWithDirection(x, y, -1, 0, placedType) == 4)
+				|| countStonesWithDirection(x, y, 1, 0, placedType) + countStonesWithDirection(x, y, -1, 0, placedType) == 4) {
+			running = false;
 			return true;
-		
+		}					
 		return false;
 	}
 	
@@ -31,5 +34,8 @@ public class Omok extends BadukBoard {
 		}
 		System.out.println(i - 1);
 		return i - 1;			
+	}
+	public boolean isRunning() {
+		return running;
 	}
 }

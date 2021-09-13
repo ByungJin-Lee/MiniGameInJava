@@ -30,6 +30,8 @@ public class AssetManager {
 	static public ImageIcon ICON_SWITCH_OFF;
 	static public ImageIcon ICON_WHITE_STONE;
 	static public ImageIcon ICON_BLACK_STONE;
+	static public ImageIcon ICON_BLACK_STONE_OP;
+	static public ImageIcon ICON_WHITE_STONE_OP;
 	
 	static public void init() {
 		readFont();
@@ -62,6 +64,8 @@ public class AssetManager {
 	static public void readOmokIcons() {
 		ICON_WHITE_STONE = new ImageIcon(Toolkit.getDefaultToolkit().createImage(AssetManager.class.getResource("../../../assets/game/white.png")).getScaledInstance(35, 35, Image.SCALE_SMOOTH));
 		ICON_BLACK_STONE = new ImageIcon(Toolkit.getDefaultToolkit().createImage(AssetManager.class.getResource("../../../assets/game/black.png")).getScaledInstance(35, 35, Image.SCALE_SMOOTH));
+		ICON_BLACK_STONE_OP = new ImageIcon(Toolkit.getDefaultToolkit().createImage(AssetManager.class.getResource("../../../assets/game/black_op.png")).getScaledInstance(35, 35, Image.SCALE_SMOOTH));
+		ICON_WHITE_STONE_OP = new ImageIcon(Toolkit.getDefaultToolkit().createImage(AssetManager.class.getResource("../../../assets/game/white_op.png")).getScaledInstance(35, 35, Image.SCALE_SMOOTH));
 	}
 	static public Image readBoard() {
 		return new ImageIcon(AssetManager.class.getResource("../../../assets/game/baduk_board.png")).getImage();

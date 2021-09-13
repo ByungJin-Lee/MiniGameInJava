@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 import me.byungjin.db.DBConnection;
 import me.byungjin.db.LogSchema;
-import me.byungjin.game.gui.MasterWindow;
+import me.byungjin.game.gui.ServerWindow;
+import me.byungjin.game.gui.ChatWindow;
 import me.byungjin.game.gui.OmokWindow;
 
 public class SystemManager {	
@@ -16,8 +17,9 @@ public class SystemManager {
 			if(true) //TODO Boolean.parseBoolean(args[0])			
 				AssetManager.getEnv(true); 								
 			else 
-				AssetManager.getEnv(false);			
-			new OmokWindow();
+				AssetManager.getEnv(false);
+			new ChatWindow();
+			new OmokWindow();			
 		}catch(Exception e){
 			catchException(ENVIRONMENT.SYSTEM, e);
 		}			

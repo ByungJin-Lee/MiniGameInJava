@@ -110,3 +110,14 @@ SE 15
    
 + 1.1.2
     + renamed packages
+
++ 1.2.0
+    + improved Omok GUI
+        + added Stone Icon Opacity when player not put
+        + boardMouseListener
+    + improved ControlPanel
+        + added ClientPanel
+        + added DialogPanel
+    + craete Class
+        + MiniDiaglog
+        + ChatWindow

@@ -7,7 +7,7 @@ public class BadukBoard {
 	protected Stone[][] stones;
 	
 	public BadukBoard() {
-		stones = new Stone[HEIGHT][WIDTH];		
+		makeBoard();
 	}
 	/**
 	 * type의 돌을 해당 위치에 놓는다.
@@ -27,9 +27,15 @@ public class BadukBoard {
 	 * @param y
 	 * @return
 	 */
-	public boolean isStone(int x, int y) {
+	public boolean isStone(int x, int y) {		
 		if(stones[y][x].equals(StoneType.NONE))
 			return true;
 		return false;
+	}
+	public void makeBoard() {
+		stones = new Stone[HEIGHT][WIDTH];		
+		for(int i = 0; i < HEIGHT; i++)
+			for(int j = 0; j < WIDTH; j++)
+				stones[i][j] = new Stone();
 	}
 }
