@@ -10,14 +10,14 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
 import me.byungjin.db.LogSchema;
-import me.byungjin.manager.AssetManager;
 import me.byungjin.manager.SystemManager;
+import resource.ResourceLoader;
 
 public class TotalLogPage extends JTable {
 	public TotalLogPage() {		
 		DefaultTableModel model = new DefaultTableModel(LogSchema.getHeader(), 0);
 		setModel(model);
-		setFont(AssetManager.DEFAULT_FONT);
+		setFont(ResourceLoader.DEFAULT_FONT);
 		Vector<String> row;
 		ArrayList<LogSchema> logs = SystemManager.getLog(); 
 		

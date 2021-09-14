@@ -6,7 +6,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import me.byungjin.manager.AssetManager;
+import resource.ResourceLoader;
 
 public abstract class Item extends JButton {
 	/**
@@ -27,7 +27,7 @@ public abstract class Item extends JButton {
 	 * @param i
 	 */
 	public Item() {
-		setFont(AssetManager.DEFAULT_FONT);
+		setFont(ResourceLoader.DEFAULT_FONT);
 		setFocusPainted(false);		
 		setContentAreaFilled(false);	
 		setBorderPainted(false);

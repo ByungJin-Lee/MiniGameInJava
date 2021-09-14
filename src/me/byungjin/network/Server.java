@@ -31,19 +31,24 @@ public class Server extends Thread implements Agent {
 	
 	@Override
 	public void run() {
-		running = true;						
-		while(running) {
-			try {
+		running = true;
+		SystemManager.message(ENVIRONMENT.SERVER, "start running");
+		try {
+			while(running) {
 				Socket sock = sockServ.accept();
-				Client client = new Client(sock, dataComeInEvent, identify);
+				Client client = new Client(sock, 
+						dataComeInEvent, 
+						clientExitEvt, 
+						identify);
 				clients.add(client);
 				if(clientEnterEvt != null) clientEnterEvt.dispatch(client);
+				SystemManager.message(ENVIRONMENT.SERVER, " Client connect : " + identify);
 				identify++;
-			}catch(Exception e) {
-				SystemManager.catchException(ENVIRONMENT.SERVER, e);
 			}
-		}
-		
+		}catch(Exception e) {			
+			SystemManager.catchException(ENVIRONMENT.SERVER, e);
+		}				
+		close();
 	}	
 	public void removeClient(Client client) {
 		clients.remove(client);
@@ -62,18 +67,32 @@ public class Server extends Thread implements Agent {
 		send(PROMISE.CHAT, nick + " " + str);
 	}
 	@Override
-	public void work() {
-		start();
-	}
-	@Override
-	public void send(short tag, String str) {
-		for(Client c : clients) {
-			c.send(tag, str);
+	public void send(PROMISE type, String str) {
+		for(Client c : clients) {			
+			c.send(type, str);
 		}
 	}
 	@Deprecated
 	@Override
 	public void sendRAW(String str) {
 		
+	}
+
+	@Override
+	public void open() {
+		start();
+	}
+
+	@Override
+	public void close() {
+		try {
+			for(Client c : clients) {
+				c.close();				
+			}
+			sockServ.close();
+			SystemManager.message(ENVIRONMENT.SERVER, "close");
+		}catch(Exception e) {
+			SystemManager.catchException(ENVIRONMENT.SERVER, e);
+		}
 	}	
 }

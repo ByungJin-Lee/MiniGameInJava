@@ -11,9 +11,10 @@ import javax.swing.border.LineBorder;
 
 import me.byungjin.game.gui.panel.ControlClientPanel;
 import me.byungjin.game.omock.gui.OmokPanel;
+import me.byungjin.network.Agent;
 
 public class OmokWindow extends JFrame {	
-	public OmokWindow() {	
+	public OmokWindow(Agent agent) {	
 		setUndecorated(true);		
 		setLocationRelativeTo(null);
 		
@@ -24,11 +25,11 @@ public class OmokWindow extends JFrame {
 		container.setLayout(new BorderLayout());
 		container.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		container.add(new ControlClientPanel("Omok"), BorderLayout.NORTH);
-		container.add(new OmokPanel(), BorderLayout.CENTER);
+		container.add(new OmokPanel(agent), BorderLayout.CENTER);
 		
 		con.add(container);
 		
 		setSize(getPreferredSize());
-		setVisible(true);		
+		setVisible(true);			
 	}
 }

@@ -17,8 +17,8 @@ import javax.swing.SwingUtilities;
 
 import me.byungjin.game.gui.listener.ControlPanelMouseListener;
 import me.byungjin.game.gui.listener.ControlRunningMouseListener;
-import me.byungjin.manager.AssetManager;
 import me.byungjin.manager.SystemManager;
+import resource.ResourceLoader;
 
 public class ControlServerPanel extends JPanel {
 	public ControlServerPanel() {
@@ -36,7 +36,7 @@ public class ControlServerPanel extends JPanel {
 		btn_running.setBorderPainted(false);
 		btn_running.setFocusPainted(false);
 		btn_running.setCursor(hand);
-		btn_running.setIcon(AssetManager.ICON_SWITCH_OFF);
+		btn_running.setIcon(ResourceLoader.ICON_SWITCH_OFF);
 		btn_running.addMouseListener(new ControlRunningMouseListener());
 		add(btn_running);
 		

@@ -5,9 +5,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JToggleButton;
 
-import me.byungjin.db.DBConnection;
-import me.byungjin.manager.AssetManager;
 import me.byungjin.manager.SystemManager;
+import resource.ResourceLoader;
 
 public class ControlRunningMouseListener extends MouseAdapter{
 	private boolean isRunning = false;
@@ -16,10 +15,10 @@ public class ControlRunningMouseListener extends MouseAdapter{
 		JToggleButton btn = (JToggleButton)e.getComponent();		
 		if(!isRunning) {
 			SystemManager.connectDB();
-			btn.setIcon(AssetManager.ICON_SWITCH_ON);
+			btn.setIcon(ResourceLoader.ICON_SWITCH_ON);
 		}else {
 			SystemManager.disconnectDB();
-			btn.setIcon(AssetManager.ICON_SWITCH_OFF);
+			btn.setIcon(ResourceLoader.ICON_SWITCH_OFF);
 		}
 		isRunning = !isRunning;
 	}

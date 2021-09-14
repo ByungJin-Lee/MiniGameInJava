@@ -4,22 +4,22 @@ import java.util.ArrayList;
 
 import me.byungjin.db.DBConnection;
 import me.byungjin.db.LogSchema;
-import me.byungjin.game.gui.ServerWindow;
-import me.byungjin.game.gui.ChatWindow;
+import resource.ResourceLoader;
+import me.byungjin.game.gui.ConnectWindow;
 import me.byungjin.game.gui.OmokWindow;
+import me.byungjin.network.Agent;
 
 public class SystemManager {	
-	static private DBConnection conn;
+	static private DBConnection conn;	
 	
 	public static void main(String[] args) {
 		try {
-			AssetManager.init();
+			ResourceLoader.init();
 			if(true) //TODO Boolean.parseBoolean(args[0])			
-				AssetManager.getEnv(true); 								
-			else 
-				AssetManager.getEnv(false);
-			new ChatWindow();
-			new OmokWindow();			
+				ResourceLoader.getEnv(true); 								
+//			else 
+//				AssetManager.getEnv(false);		
+			new ConnectWindow();				
 		}catch(Exception e){
 			catchException(ENVIRONMENT.SYSTEM, e);
 		}			
@@ -40,11 +40,11 @@ public class SystemManager {
 	}	
 	static public void catchException(ENVIRONMENT tag, Exception e) {		
 		System.out.println(tag + " - " + e.getMessage());
-		e.printStackTrace();
+//		e.printStackTrace();
 		log(tag, e.getMessage(), true);
 	}
 	static public void message(ENVIRONMENT tag, String str) {
-		System.out.println(":" + tag + " - " + str);
+		System.out.println(": " + tag + " - " + str);
 		log(tag, str, false);
 	}	
 	static private void log(ENVIRONMENT tag, String str, boolean warning) {

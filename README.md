@@ -121,3 +121,9 @@ SE 15
     + craete Class
         + MiniDiaglog
         + ChatWindow
+   
++ 1.2.1
+    + improved Package Structure
+        + created ResoureLoader Class
+    + improved Network Class
+        + methods
