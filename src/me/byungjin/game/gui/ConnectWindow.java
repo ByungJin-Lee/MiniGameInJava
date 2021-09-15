@@ -22,13 +22,13 @@ import me.byungjin.manager.SystemManager;
 import me.byungjin.network.Agent;
 
 public class ConnectWindow extends JFrame {
-	private Agent agent;
-	public ConnectWindow(Agent age, boolean running) {		
-		agent = age;
+	private Agent agent = null;
+	
+	public ConnectWindow() {		
 		setUndecorated(true);
 		
 		Container con = getContentPane();
-		con.setLayout(new GridLayout(1,1));
+		con.setLayout(new GridLayout(1,1));		
 		
 		JPanel container = new JPanel();
 		container.setLayout(new BorderLayout());
@@ -57,9 +57,9 @@ public class ConnectWindow extends JFrame {
 		JButton connect_open = new JButton("connect");
 		connect_open.addActionListener(new ActionListener() {		
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public synchronized void actionPerformed(ActionEvent e) {
 				try {
-					agent = NetworkManager.getClientToHost(null, text_ipField.getText());
+					agent = NetworkManager.getClientToHost(text_ipField.getText());
 					agent.open();
 				} catch (Exception e1) { 
 					SystemManager.catchException(ENVIRONMENT.GUI, e1);
@@ -80,9 +80,9 @@ public class ConnectWindow extends JFrame {
 		JButton host_open = new JButton("host open");
 		host_open.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public synchronized void actionPerformed(ActionEvent e) {
 				try {
-					agent = NetworkManager.getHost(null, "Host");
+					agent = NetworkManager.getHost("Host");
 					agent.open();
 				} catch (Exception e1) {
 					SystemManager.catchException(ENVIRONMENT.GUI, e1);
@@ -98,8 +98,7 @@ public class ConnectWindow extends JFrame {
 				agent.close();
 			}
 		});
-		inner.add(host_close);
-		
+		inner.add(host_close);		
 		
 		content.add(inner);			
 		
@@ -109,5 +108,15 @@ public class ConnectWindow extends JFrame {
 		
 		setSize(getPreferredSize());
 		setVisible(true);
+	}
+	
+	public Agent getAgent() {		
+		while(true) {
+			synchronized(this) {				
+				if(agent != null && agent.isRunning()) {					
+					return agent;
+				}
+			}
+		}
 	}
 }

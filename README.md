@@ -127,3 +127,12 @@ SE 15
         + created ResoureLoader Class
     + improved Network Class
         + methods
+   
++ 1.2.2
+    + improved Class
+        + Agent abstract Class
+        + Game abstract Class
+        + PROMISE
+        + StoneType
+        + Omok
+    + almost complete Omok Class

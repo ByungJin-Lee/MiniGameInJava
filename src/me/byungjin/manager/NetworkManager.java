@@ -13,8 +13,8 @@ public class NetworkManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public static Server getServer(DataComeInEvent dataProc) throws Exception {
-		return new Server(dataProc, null);
+	public static Server getServer() throws Exception {
+		return new Server(null);
 	}
 	/**
 	 * 사용자 호스트 서버 생성
@@ -23,24 +23,24 @@ public class NetworkManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public static Server getHost(DataComeInEvent dataProc, String nick) throws Exception {
-		return new Server(dataProc, nick);
+	public static Server getHost(String nick) throws Exception {
+		return new Server(nick);
 	}
 	/**
 	 * 중앙 서버 연결용 사용자 생성
 	 * @return
 	 * @throws Exception
 	 */
-	public static Client getClientToServer(DataComeInEvent dataProc) throws Exception {
-		return new Client(dataProc);
+	public static Client getClientToServer() throws Exception {
+		return new Client();
 	}
 	/**
 	 * 사용자 호스트 연결용 사용자 생성
 	 * @return
 	 * @throws Exception 
 	 */
-	public static Client getClientToHost(DataComeInEvent dataProc, String ip) throws Exception {
-		return new Client(dataProc, ip);
+	public static Client getClientToHost(String ip) throws Exception {
+		return new Client(ip);
 	}	
 	/**
 	 * Ip 얻기

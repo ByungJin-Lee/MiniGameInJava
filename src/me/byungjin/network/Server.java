@@ -9,23 +9,19 @@ import me.byungjin.manager.SystemManager;
 import me.byungjin.network.event.ClientEvent;
 import me.byungjin.network.event.DataComeInEvent;
 
-public class Server extends Thread implements Agent {
-	private boolean running;
+public class Server extends Agent {	
 	private ServerSocket sockServ;	
 	private int identify = 0;
 	private Vector<Client> clients;
-	private String nick;
-	
-	//Events
-	private DataComeInEvent dataComeInEvent;	
+		
+	//Events	
 	private ClientEvent clientExitEvt;
 	private ClientEvent clientEnterEvt;
 	
-	public Server(DataComeInEvent event, String nick) throws Exception {		
+	public Server(String nick) throws Exception {		
 		this.nick = nick;
 		sockServ = new ServerSocket(nick == null ? ENVIRONMENT.SERVER_PORT.getValue() : ENVIRONMENT.PORT.getValue());
-		clients = new Vector<Client>();
-		dataComeInEvent = event;
+		clients = new Vector<Client>();		
 		identify = 0;
 	}
 	
@@ -37,18 +33,23 @@ public class Server extends Thread implements Agent {
 			while(running) {
 				Socket sock = sockServ.accept();
 				Client client = new Client(sock, 
-						dataComeInEvent, 
-						clientExitEvt, 
+						chatComeInEvent, 
+						otherComeInEvent,
+						gameComeInEvent,
+						clientEnterEvt,
 						identify);
 				clients.add(client);
+				client.open();
 				if(clientEnterEvt != null) clientEnterEvt.dispatch(client);
 				SystemManager.message(ENVIRONMENT.SERVER, " Client connect : " + identify);
 				identify++;
 			}
 		}catch(Exception e) {			
 			SystemManager.catchException(ENVIRONMENT.SERVER, e);
-		}				
-		close();
+		}finally {
+			close();			
+			SystemManager.message(ENVIRONMENT.SERVER, "close");
+		}		
 	}	
 	public void removeClient(Client client) {
 		clients.remove(client);
@@ -89,10 +90,32 @@ public class Server extends Thread implements Agent {
 			for(Client c : clients) {
 				c.close();				
 			}
-			sockServ.close();
-			SystemManager.message(ENVIRONMENT.SERVER, "close");
+			if(!sockServ.isClosed())
+				sockServ.close();			
 		}catch(Exception e) {
 			SystemManager.catchException(ENVIRONMENT.SERVER, e);
 		}
+		running = false;
 	}	
+	@Override
+	public synchronized void addChatComeInEvent(DataComeInEvent event) {
+		super.addChatComeInEvent(event);
+		for(Agent a : clients) {
+			a.addChatComeInEvent(event);
+		}
+	}
+	@Override
+	public synchronized void addOtherComeInEvent(DataComeInEvent event) {
+		super.addOtherComeInEvent(event);
+		for(Agent a : clients) {
+			a.addOtherComeInEvent(event);
+		}
+	}
+	@Override
+	public synchronized void addGameComeInEvent(DataComeInEvent event) {
+		super.addGameComeInEvent(event);
+		for(Agent a : clients) {
+			a.addGameComeInEvent(event);
+		}
+	}
 }

@@ -10,23 +10,21 @@ import me.byungjin.manager.SystemManager;
 import me.byungjin.network.event.ClientEvent;
 import me.byungjin.network.event.DataComeInEvent;
 
-public class Client extends Thread implements Agent {
+public class Client extends Agent {
 	private Socket sock;
 	private PrintWriter sender;
-	private BufferedReader reader;
-	private DataComeInEvent dataComeInEvent;
+	private BufferedReader reader;	
 	private ClientEvent clientExitEvent;
-	private int identify = -1;
-	private String nick;
+	private int identify = -1;	
 	
 	/**
 	 * 중앙 서버 접근용 클라이언트
 	 * @param event
 	 * @throws Exception
 	 */
-	public Client(DataComeInEvent event) throws Exception {
+	public Client() throws Exception {
 		sock = new Socket(ENVIRONMENT.SERVER_IP, ENVIRONMENT.SERVER_PORT.getValue());		
-		init(event);
+		init();
 	}
 	/**
 	 * 사용자 서버 접근용 클라이언트
@@ -34,9 +32,9 @@ public class Client extends Thread implements Agent {
 	 * @param event
 	 * @throws Exception
 	 */
-	public Client(DataComeInEvent event, String ip) throws Exception{
+	public Client(String ip) throws Exception{
 		sock = new Socket(ip, ENVIRONMENT.PORT.getValue());
-		init(event);
+		init();
 	}
 	/**
 	 * 서버 내에서 관리되는 클라이언트 자원
@@ -45,16 +43,23 @@ public class Client extends Thread implements Agent {
 	 * @param identify
 	 * @throws Exception
 	 */
-	public Client(Socket sock, DataComeInEvent event, ClientEvent clientExitEvent, int identify) throws Exception {
+	public Client(Socket sock, 
+			DataComeInEvent chatEvent, 
+			DataComeInEvent otherEvent, 
+			DataComeInEvent gameEvent,
+			ClientEvent clientExitEvent, 
+			int identify) throws Exception {
 		this.sock = sock;
 		this.clientExitEvent = clientExitEvent;
 		this.identify = identify;
-		init(event);
+		this.chatComeInEvent = chatEvent;
+		this.otherComeInEvent = otherEvent;
+		this.gameComeInEvent = gameEvent;
+		init();
 	}
 	
-	private void init(DataComeInEvent event) throws Exception {
-		dataComeInEvent = event;				
-		sender = new PrintWriter(sock.getOutputStream());
+	private void init() throws Exception {					
+		sender = new PrintWriter(sock.getOutputStream(), true);
 		reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 	}	
 	public int getIdentify() {
@@ -62,19 +67,22 @@ public class Client extends Thread implements Agent {
 	}
 	@Override
 	public void run() {
-		SystemManager.message(ENVIRONMENT.CLIENT, identify + " connect");
+		running = true;
+		SystemManager.message(ENVIRONMENT.CLIENT, " connect : " + identify);
 		String buffer;
 		try {
 			while(sock.isConnected()) {
 				if((buffer = reader.readLine()) != null)
-					dataComeInEvent.dispatch(this, buffer);
+					comeInRounter(identify, buffer);
 			}							
 		}catch(Exception e) {
 			close();
-			SystemManager.catchException(ENVIRONMENT.CLIENT, e);
-			if(clientExitEvent != null)
-				clientExitEvent.dispatch(this);
+			SystemManager.catchException(ENVIRONMENT.CLIENT, e);			
 		}
+		running = false;
+		if(clientExitEvent != null)
+			clientExitEvent.dispatch(this);
+		SystemManager.message(ENVIRONMENT.CLIENT, "disconnect : " + identify);
 	}
 	
 	@Override
@@ -90,12 +98,12 @@ public class Client extends Thread implements Agent {
 		send(PROMISE.CHAT, nick + " " +str);
 	}	
 	@Override
-	public void send(PROMISE type, String str) {
-		if(sock.isConnected())
-			sendRAW(type + " " + str);
+	public void send(PROMISE type, String str) {				
+		sendRAW(type + " " + str);
 	}
 	@Override
-	public void sendRAW(String str) {
+	public void sendRAW(String str) {		
+		super.sendRAW(str);
 		if(sock.isConnected())
 			sender.println(str);
 	}
@@ -108,10 +116,9 @@ public class Client extends Thread implements Agent {
 		try {
 			sender.close();
 			reader.close();
-			sock.close();
-			SystemManager.message(ENVIRONMENT.CLIENT, identify + " disconnect");
+			sock.close();			
 		}catch(Exception e) {			
 			SystemManager.catchException(ENVIRONMENT.CLIENT, e);
 		}
-	}
+	}	
 }

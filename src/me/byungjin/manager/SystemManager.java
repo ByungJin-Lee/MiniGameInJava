@@ -7,7 +7,6 @@ import me.byungjin.db.LogSchema;
 import resource.ResourceLoader;
 import me.byungjin.game.gui.ConnectWindow;
 import me.byungjin.game.gui.OmokWindow;
-import me.byungjin.network.Agent;
 
 public class SystemManager {	
 	static private DBConnection conn;	
@@ -18,8 +17,9 @@ public class SystemManager {
 			if(true) //TODO Boolean.parseBoolean(args[0])			
 				ResourceLoader.getEnv(true); 								
 //			else 
-//				AssetManager.getEnv(false);		
-			new ConnectWindow();				
+//				AssetManager.getEnv(false);				
+			ConnectWindow connectWindow = new ConnectWindow();				
+			new OmokWindow(connectWindow.getAgent());			
 		}catch(Exception e){
 			catchException(ENVIRONMENT.SYSTEM, e);
 		}			
@@ -39,7 +39,7 @@ public class SystemManager {
 		return null;
 	}	
 	static public void catchException(ENVIRONMENT tag, Exception e) {		
-		System.out.println(tag + " - " + e.getMessage());
+		System.out.println("warning! " + tag + " - " + e.getMessage());
 //		e.printStackTrace();
 		log(tag, e.getMessage(), true);
 	}

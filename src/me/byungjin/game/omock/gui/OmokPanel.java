@@ -6,7 +6,6 @@ import java.awt.Image;
 
 import javax.swing.JPanel;
 
-import me.byungjin.game.omock.Omok;
 import me.byungjin.network.Agent;
 import resource.ResourceLoader;
 
@@ -18,7 +17,7 @@ public class OmokPanel extends JPanel {
 		ResourceLoader.readOmokIcons();		
 		boardImage = ResourceLoader.readBoard();						
 		setCursor(new Cursor(Cursor.HAND_CURSOR));
-		OmokMouseListener mouseL = new OmokMouseListener(this);
+		OmokMouseListener mouseL = new OmokMouseListener(this, agent);
 		addMouseListener(mouseL);
 		addMouseMotionListener(mouseL);
 	}	

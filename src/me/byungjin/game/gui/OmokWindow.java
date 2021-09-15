@@ -15,7 +15,7 @@ import me.byungjin.network.Agent;
 
 public class OmokWindow extends JFrame {	
 	public OmokWindow(Agent agent) {	
-		setUndecorated(true);		
+		setUndecorated(true);
 		setLocationRelativeTo(null);
 		
 		Container con = getContentPane();
