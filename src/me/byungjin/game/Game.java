@@ -22,13 +22,9 @@ public abstract class Game {
 	 */
 	public abstract void command(Object source, String request);
 	/**
-	 * 게임 승리 확인
+	 * 게임 승리 확인(-1 : soso, 0 : lose, 1 : win)
 	 */
-	public abstract boolean isWin(Object team);
-	/**
-	 * 게임 패배 확인
-	 */
-	public abstract boolean isLose(Object team);
+	public abstract int isWinOrLose(Object team);	
 	/**
 	 * 게임 진행중 확인
 	 * @return

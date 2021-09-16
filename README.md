@@ -136,3 +136,12 @@ SE 15
         + StoneType
         + Omok
     + almost complete Omok Class
+   
++ 1.2.3
+    + improved Design
+        + MiniDialog ControlPanel
+        + Client ControlPanel
+        + Server ControlPanel
+    + created ConnectWarning Panel
+    + craeted Abstract Class
+        + MiniDialog Panel

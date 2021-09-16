@@ -6,7 +6,9 @@ import me.byungjin.db.DBConnection;
 import me.byungjin.db.LogSchema;
 import resource.ResourceLoader;
 import me.byungjin.game.gui.ConnectWindow;
+import me.byungjin.game.gui.MiniDialog;
 import me.byungjin.game.gui.OmokWindow;
+import me.byungjin.game.gui.panel.ConnectWarningPanel;
 
 public class SystemManager {	
 	static private DBConnection conn;	
@@ -17,9 +19,11 @@ public class SystemManager {
 			if(true) //TODO Boolean.parseBoolean(args[0])			
 				ResourceLoader.getEnv(true); 								
 //			else 
-//				AssetManager.getEnv(false);				
-			ConnectWindow connectWindow = new ConnectWindow();				
-			new OmokWindow(connectWindow.getAgent());			
+//				AssetManager.getEnv(false);
+			new MiniDialog(new ConnectWarningPanel(), "Warning");
+			
+//			ConnectWindow connectWindow = new ConnectWindow();				
+//			new OmokWindow(connectWindow.getAgent());			
 		}catch(Exception e){
 			catchException(ENVIRONMENT.SYSTEM, e);
 		}			

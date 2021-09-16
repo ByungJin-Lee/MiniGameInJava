@@ -95,7 +95,7 @@ public class Omok extends Game {
 	}		
 
 	@Override
-	public boolean isWin(Object team) {	
+	public int isWinOrLose(Object team) {	
 		StoneType type = (StoneType)team;
 		
 		if(countStonesWithDirection(1, 1, type) + countStonesWithDirection(-1, -1, type) == 4
@@ -103,15 +103,9 @@ public class Omok extends Game {
 				|| countStonesWithDirection(0, 1, type) + countStonesWithDirection(0, -1, type) == 4
 				|| countStonesWithDirection(1, 0, type) + countStonesWithDirection(-1, 0, type) == 4) {			
 			running = false;
-			return true;
+			return mine == type ? 1 : 0;
 		}						
-		return false;
-	}
-
-	@Override
-	public boolean isLose(Object team) {
-		running = false;
-		return false;
+		return -1;
 	}
 	@Override
 	public void init() {											

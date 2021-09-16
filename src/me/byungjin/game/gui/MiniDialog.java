@@ -15,8 +15,8 @@ import me.byungjin.game.gui.panel.ControlDialogPanel;
 public class MiniDialog extends JDialog {
 	public MiniDialog(JPanel content, String text) {		
 		setUndecorated(true);		
-		setLayout(new GridLayout(1,1));
-		setMinimumSize(new Dimension(200, 150));
+		setLayout(new GridLayout(1,1));		
+		setMinimumSize(new Dimension(200,100));
 		setLocationRelativeTo(null);
 		
 		JPanel container = new JPanel();		
@@ -32,6 +32,7 @@ public class MiniDialog extends JDialog {
 		
 		container.add(padding, BorderLayout.CENTER);
 		add(container);
+		setSize(getPreferredSize());
 		setVisible(true);
 	}
 }

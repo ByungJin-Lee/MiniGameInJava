@@ -60,7 +60,7 @@ public class OmokMouseListener extends MouseAdapter {
 	}
 	
 	public void put(int x, int y) {		
-		if(omok.isWin(type))
+		if(omok.isWinOrLose(type) > -1)
 			new MiniDialog(new JPanel(), "Omok");
 		stone.put(x, y);
 		stone = new StoneLabel(type = StoneType.reverse(type));
