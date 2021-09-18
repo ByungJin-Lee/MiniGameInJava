@@ -4,9 +4,8 @@ import java.util.ArrayList;
 
 import me.byungjin.db.DBConnection;
 import me.byungjin.db.LogSchema;
+import me.byungjin.game.gui.*;
 import resource.ResourceLoader;
-import me.byungjin.game.gui.ConnectWindow;
-import me.byungjin.game.gui.OmokWindow;
 
 public class SystemManager {	
 	static private DBConnection conn;	
@@ -14,12 +13,14 @@ public class SystemManager {
 	public static void main(String[] args) {
 		try {
 			ResourceLoader.init();
-			if(true) //TODO Boolean.parseBoolean(args[0])
-				ResourceLoader.getEnv(true); 								
-//			else 
-//				AssetManager.getEnv(false);			
-			ConnectWindow connectWindow = new ConnectWindow();				
-			new OmokWindow(connectWindow.getAgent());
+			if(Boolean.parseBoolean(args[0])){
+				ResourceLoader.getEnv(true);
+				new ServerWindow();
+			}
+			else{
+				ResourceLoader.getEnv(false);
+				new LoginWindow();
+			}
 		}catch(Exception e){
 			catchException(ENVIRONMENT.SYSTEM, e);
 		}			

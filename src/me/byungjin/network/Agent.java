@@ -75,7 +75,7 @@ public abstract class Agent extends Thread {
 	 * @param source
 	 * @param data
 	 */
-	void comeInRounter(int identify, String data) {		
+	void comeInRouter(int identify, String data) {
 		SystemManager.message(ENVIRONMENT.CLIENT, identify + " / " + data);
 		StringTokenizer tokens = new StringTokenizer(data);
 		

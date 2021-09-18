@@ -73,7 +73,7 @@ public class Client extends Agent {
 		try {
 			while(sock.isConnected()) {
 				if((buffer = reader.readLine()) != null)
-					comeInRounter(identify, buffer);
+					comeInRouter(identify, buffer);
 			}							
 		}catch(Exception e) {
 			close();
