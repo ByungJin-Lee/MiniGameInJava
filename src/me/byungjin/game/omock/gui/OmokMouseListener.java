@@ -11,6 +11,7 @@ import me.byungjin.game.omock.Omok;
 import me.byungjin.game.omock.StoneSetCommand;
 import me.byungjin.game.omock.StoneType;
 import me.byungjin.network.Agent;
+import resource.ResourceLoader;
 
 public class OmokMouseListener extends MouseAdapter {
 	private int x, y;
@@ -27,14 +28,15 @@ public class OmokMouseListener extends MouseAdapter {
 		omok.addPredictCommand(new StoneSetCommand() {		
 			@Override
 			public void execute(int x, int y) {
-				stone.set(x, y);
+				set(x, y);
 			}
 		});			
 		omok.addPutCommand(new StoneSetCommand() {
 			@Override
 			public void execute(int x, int y) {
-				omok.putAlone(x, y, type);
-				put(x, y);
+				set(x, y);				
+				put();
+				omok.putAlone();
 			}			
 		});
 	}
@@ -48,22 +50,32 @@ public class OmokMouseListener extends MouseAdapter {
 				
 		if( x < 0 || x > 18 || y < 0 || y > 18) return;
 		
-		stone.set(x, y);		
-		omok.predict(x, y);
+		set(x, y);
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {				
 		if(!omok.isRunning() || !omok.isTurn()) return;			
 		
-		if(omok.put(x, y, type))
-			put(x, y);
+		if(omok.isNull(x, y)) {
+			omok.putWith();
+			put();
+		}		
 	}
 	
-	public void put(int x, int y) {		
+	public void put() {
+		stone.put();
+		type = StoneType.reverse(type);
+		stone = new StoneLabel(type);
+		panel.add(stone);
+		ResourceLoader.playWav("game/stone_put_wav.WAV");
 		if(omok.isWinOrLose(type) > -1)
-			new MiniDialog(new JPanel(), "Omok");
-		stone.put(x, y);
-		stone = new StoneLabel(type = StoneType.reverse(type));
-		panel.add(stone);		
+			new MiniDialog(new JPanel(), "Omok");				
+	}
+	
+	public void set(int x, int y) {
+		if(!omok.isSame(x, y) && omok.isNull(x, y)) {
+			stone.set(x, y);
+			omok.predict();
+		}
 	}
 }

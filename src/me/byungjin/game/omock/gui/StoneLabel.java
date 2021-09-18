@@ -24,9 +24,9 @@ public class StoneLabel extends JLabel {
 	public void set(int x, int y) {
 		setLocation(x * BadukBoard.STONE_SIZE + xl, y * BadukBoard.STONE_SIZE + yl);		
 	}
-	public void put(int x, int y) {
+	public void put() {
 		setIcon(type == StoneType.WHITE ? ResourceLoader.ICON_WHITE_STONE : ResourceLoader.ICON_BLACK_STONE);
-	}
+	}	
 	public StoneType getStoneType() {
 		return type;
 	}

@@ -10,7 +10,11 @@ public enum PROMISE {
 	VICTORY(318), LOSE(319), READY_TOO(320),
 	
 	/* Omok */
-	PUT(303), PREDICT(304);
+	PUT(303), PREDICT(304),
+	
+	/* Bulls And Cows */
+	THROW(305), THROW_RESULT(306)
+	;
 	
 	
 	private short value;

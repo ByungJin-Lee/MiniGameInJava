@@ -16,6 +16,11 @@ public class Point {
 		this.x = x;
 		this.y = y;
 	}
+	public boolean isSame(int x, int y) {
+		if(this.x == x && this.y == y)
+			return true;
+		return false;
+	}
 	
 	public int getX() {
 		return x;
@@ -27,5 +32,14 @@ public class Point {
 	public String toString() {
 		return "Point " + x + " " + y;
 	
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Point) {
+			Point p = (Point)obj;
+			if(p.x == x && p.y == y)
+				return true;
+		}
+		return false;
 	}
 }

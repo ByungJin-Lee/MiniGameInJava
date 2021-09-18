@@ -9,6 +9,9 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.PrintWriter;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 
 import me.byungjin.manager.ENVIRONMENT;
@@ -148,6 +151,21 @@ public class ResourceLoader {
 			writer.println("DB_PW=" + ENVIRONMENT.DB_PW);			
 			writer.close();
 			SystemManager.message(ENVIRONMENT.RESOURCELOADER, "save Env");
+		}catch(Exception e) {
+			SystemManager.catchException(ENVIRONMENT.RESOURCELOADER, e);
+		}
+	}
+	/**
+	 * 효과음 재생
+	 * @param file
+	 */
+	static public void playWav(String file) {
+		try {						
+			AudioInputStream ais = AudioSystem.getAudioInputStream(ResourceLoader.class.getResource(file));			
+			Clip clip = AudioSystem.getClip();
+			clip.stop();
+			clip.open(ais);
+			clip.start();			
 		}catch(Exception e) {
 			SystemManager.catchException(ENVIRONMENT.RESOURCELOADER, e);
 		}

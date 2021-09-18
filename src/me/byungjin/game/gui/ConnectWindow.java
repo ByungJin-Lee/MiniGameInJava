@@ -24,7 +24,8 @@ import me.byungjin.network.Agent;
 public class ConnectWindow extends JFrame {
 	private Agent agent = null;
 	
-	public ConnectWindow() {		
+	public ConnectWindow() {	
+		setTitle("Connect Window");
 		setUndecorated(true);
 		
 		Container con = getContentPane();

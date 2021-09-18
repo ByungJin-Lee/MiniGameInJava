@@ -15,50 +15,79 @@ public class Omok extends Game {
 	private Point point;
 	private StoneSetCommand predictCommand;
 	private StoneSetCommand putCommand;
-	
+			
 	public Omok(Agent agent) {		
 		super(agent);
 		board = new BadukBoard();
 		point = new Point();
 		start();
 	}
-	public int countStonesWithDirection(int dx, int dy, StoneType type) {		
-		int i = 1, curX, curY;
-		while(true) {
-			curX = point.getX() + dx * i;
-			curY = point.getY() + dy * i;
-			
-			if(curX < 0 || curX >= board.WIDTH || curY >= board.HEIGHT || curY < 0)
-				break;
-			if(!(board.getType(curX, curY) == type))
-				break;
-			
-			i++;
-		}				
-		return i - 1;			
+	/**
+	 * 같은 좌표인지 확인.
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public boolean isSame(int x, int y) {
+		if(point.isSame(x, y))	return true;
+				
+		return false;
 	}
-	public boolean put(int x, int y, StoneType type) {
-		point.setPoint(x, y);
-		if(board.put(x, y, type)) {
-			turn = false;
-			send(PROMISE.PUT, x + " " + y);
+	/**
+	 * 현재 지점을 확인하고 위치 설정함
+	 * @param x
+	 * @param y
+	 */
+	public boolean isNull(int x, int y) {
+		if(board.isEmpty(x, y)) {
+			point.setPoint(x, y);
 			return true;
 		}
 		return false;
 	}
-	public void putAlone(int x, int y, StoneType type) {
-		point.setPoint(x, y);
-		board.put(x, y, type);
+	/**
+	 * 돌을 놓고 서버에 전달함.
+	 */
+	public void putWith() {
+		board.put(point.getX(), point.getY(), mine);
+		turn = false;
+		send(PROMISE.PUT, point.getX() + " " + point.getY());		
+	}	
+	/**
+	 * 돌을 놓지만 서버에는 전달하지 않음.		
+	 * @param x
+	 * @param y
+	 * @param type
+	 */
+	public void putAlone() {		
+		board.put(point.getX(), point.getY(), StoneType.reverse(mine));
 	}
-	public void predict(int x, int y) {
-		send(PROMISE.PREDICT, x + " " + y);
+	/**
+	 * 바둑돌 예상 위치 전송
+	 * @param x
+	 * @param y
+	 */
+	public void predict() {
+		send(PROMISE.PREDICT, point.getX() + " " + point.getY());
 	}
+	/**
+	 * 현재 턴 확인
+	 * @return
+	 */
 	public boolean isTurn() {
 		return turn;
-	}	
+	}
+	/**
+	 * 바둑돌을 놓을 예상 지점이 확인되는 경우 할 행동
+	 * @param cmd
+	 */
 	public void addPredictCommand(StoneSetCommand cmd) {
 		this.predictCommand = cmd;
 	}
+	/**
+	 * 바둑돌을 놓은 지점이 확인되는 경우 할 행동
+	 * @param cmd
+	 */
 	public void addPutCommand(StoneSetCommand cmd) {
 		this.putCommand = cmd;
 	}
@@ -93,7 +122,28 @@ public class Omok extends Game {
 		}
 		
 	}		
-
+	/**
+	 * 해당 기점을 기준으로 바둑알의 갯수를 확인함
+	 * @param dx
+	 * @param dy
+	 * @param type
+	 * @return
+	 */
+	public int countStonesWithDirection(int dx, int dy, StoneType type) {		
+		int i = 1, curX, curY;
+		while(true) {
+			curX = point.getX() + dx * i;
+			curY = point.getY() + dy * i;
+			
+			if(curX < 0 || curX >= board.WIDTH || curY >= board.HEIGHT || curY < 0)
+				break;
+			if(!(board.getType(curX, curY) == type))
+				break;
+			
+			i++;
+		}				
+		return i - 1;			
+	}	
 	@Override
 	public int isWinOrLose(Object team) {	
 		StoneType type = (StoneType)team;
@@ -106,9 +156,9 @@ public class Omok extends Game {
 			return mine == type ? 1 : 0;
 		}						
 		return -1;
-	}
+	}	
 	@Override
-	public void init() {											
+	public void init() {
 		if(agent instanceof Client)
 			send(PROMISE.READY, "");
 	}

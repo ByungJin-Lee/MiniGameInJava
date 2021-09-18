@@ -14,7 +14,7 @@ public abstract class Game {
 	 */
 	public Game(Agent agent) {
 		this.agent = agent;
-		running = false;		
+		running = false;
 	}	
 	/**
 	 * 실시간 상호작용
@@ -22,7 +22,7 @@ public abstract class Game {
 	 */
 	public abstract void command(Object source, String request);
 	/**
-	 * 게임 승리 확인(-1 : soso, 0 : lose, 1 : win)
+	 * 게임 승리 확인(-1 : default, 0 : lose, 1 : win)
 	 */
 	public abstract int isWinOrLose(Object team);	
 	/**
