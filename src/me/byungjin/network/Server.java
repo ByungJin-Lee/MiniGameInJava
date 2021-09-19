@@ -23,6 +23,12 @@ public class Server extends Agent {
 		sockServ = new ServerSocket(nick == null ? ENVIRONMENT.SERVER_PORT.getValue() : ENVIRONMENT.PORT.getValue());
 		clients = new Vector<Client>();		
 		identify = 0;
+		clientExitEvt = new ClientEvent() {
+			@Override
+			public void dispatch(Client source) {
+				clients.remove(source);
+			}
+		};
 	}
 	
 	@Override
@@ -36,7 +42,7 @@ public class Server extends Agent {
 						chatComeInEvent, 
 						otherComeInEvent,
 						gameComeInEvent,
-						clientEnterEvt,
+						clientExitEvt,
 						identify);
 				clients.add(client);
 				client.open();
@@ -57,11 +63,14 @@ public class Server extends Agent {
 	public void broadcast(String str) {
 		
 	}
-	public void sendRAWExcpetionSpecial(Client c, String str) {
+	public void sendRAWExceptionSpecial(Client c, String str) {
 		for(Client cl : clients) {
 			if(cl.equals(c)) continue;
 			cl.sendRAW(str);
 		}
+	}
+	public int getNumberOfClients(){
+		return clients.size();
 	}
 	@Override
 	public void chat(String str) {

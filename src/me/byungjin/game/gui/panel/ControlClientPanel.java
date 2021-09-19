@@ -21,6 +21,7 @@ import javax.swing.SwingUtilities;
 
 import me.byungjin.game.gui.listener.ControlPanelMouseListener;
 import me.byungjin.manager.SystemManager;
+import resource.ResourceLoader;
 
 public class ControlClientPanel extends JPanel {
 	public ControlClientPanel(String title) {
@@ -47,6 +48,7 @@ public class ControlClientPanel extends JPanel {
 		left.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 0));
 		
 		JLabel label = new JLabel(title);
+		label.setFont(ResourceLoader.DEFAULT_FONT);
 		label.setForeground(Color.gray);
 		left.add(label);			
 		

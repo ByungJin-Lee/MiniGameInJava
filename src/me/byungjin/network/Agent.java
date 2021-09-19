@@ -44,7 +44,13 @@ public abstract class Agent extends Thread {
 	/**
 	 * 연결 종료
 	 */
-	public abstract void close();	
+	public abstract void close();
+
+	public void block(){
+		close();
+		interrupt();
+	}
+
 	/**
 	 * 연결 확인
 	 * @return

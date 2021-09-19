@@ -10,6 +10,7 @@ import javax.swing.border.LineBorder;
 
 public class ClientWindow extends JFrame {
 	private Agent agentToServer;
+	private Agent client;
 	
 	public ClientWindow(Agent agent) {
 		this.agentToServer = agent;
@@ -33,5 +34,17 @@ public class ClientWindow extends JFrame {
 
 		setSize(getPreferredSize());
 		setVisible(true);
+	}
+
+	public void stopAgent(){
+		if(agentToServer == null && client == null) return;
+
+		if(agentToServer != null && agentToServer.isRunning()){
+			agentToServer.block();
+		}
+
+		if(client != null && client.isRunning()){
+			client.block();
+		}
 	}
 }

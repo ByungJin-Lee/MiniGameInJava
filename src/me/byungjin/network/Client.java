@@ -47,7 +47,7 @@ public class Client extends Agent {
 			DataComeInEvent chatEvent, 
 			DataComeInEvent otherEvent, 
 			DataComeInEvent gameEvent,
-			ClientEvent clientExitEvent, 
+			ClientEvent clientExitEvent,
 			int identify) throws Exception {
 		this.sock = sock;
 		this.clientExitEvent = clientExitEvent;
@@ -61,7 +61,7 @@ public class Client extends Agent {
 	private void init() throws Exception {					
 		sender = new PrintWriter(sock.getOutputStream(), true);
 		reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-	}	
+	}
 	public int getIdentify() {
 		return identify;
 	}

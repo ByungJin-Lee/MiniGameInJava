@@ -45,7 +45,8 @@ public class DBConnection {
 			if(rs.next() && rs.getInt(1) > 0) {
 				SystemManager.message(ENVIRONMENT.DB, "check User(" + id +")");
 				return true;
-			}		
+			}
+			return false;
 		} catch (SQLException e) {
 			SystemManager.catchException(ENVIRONMENT.DB, e);			
 		}		

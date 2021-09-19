@@ -26,9 +26,10 @@ public class SystemManager {
 		}			
 	}
 	
-	static public void connectDB() {
+	static public DBConnection connectDB() {
 		if(conn == null || !conn.isConnect)
 			conn = new DBConnection();
+		return conn;
 	}
 	static public void disconnectDB() {
 		if(conn != null && conn.isConnect)
@@ -52,5 +53,8 @@ public class SystemManager {
 		if(conn != null && conn.isConnect) {
 			conn.log(tag, str, warning);
 		}
+	}
+	static public DBConnection getDBConn(){
+		return conn;
 	}
 }

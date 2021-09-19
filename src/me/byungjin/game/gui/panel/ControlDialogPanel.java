@@ -20,6 +20,7 @@ import javax.swing.SwingUtilities;
 
 import me.byungjin.game.gui.listener.ControlPanelMouseListener;
 import me.byungjin.manager.SystemManager;
+import resource.ResourceLoader;
 
 public class ControlDialogPanel extends JPanel {
 	public ControlDialogPanel(String title) {
@@ -34,6 +35,7 @@ public class ControlDialogPanel extends JPanel {
 		FlowLayout flowLayout_left = (FlowLayout) left.getLayout();
 		flowLayout_left.setAlignment(FlowLayout.LEFT);
 		JLabel tit = new JLabel(title);
+		tit.setFont(ResourceLoader.DEFAULT_FONT);
 		tit.setForeground(Color.gray);
 		left.add(tit);
 		
