@@ -49,11 +49,9 @@ public class OmokMouseListener extends MouseAdapter {
 		y = (e.getY() - 7) / BadukBoard.STONE_SIZE;
 				
 		if( x < 0 || x > 18 || y < 0 || y > 18) return;
-		
-		System.out.println("pos " + x + " " + y);
 				
-		set(x, y);
-		omok.predict();
+		if(set(x, y))
+			omok.predict();
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {				
@@ -76,8 +74,12 @@ public class OmokMouseListener extends MouseAdapter {
 			new MiniDialog(new JPanel(), "Omok");				
 	}
 	
-	public void set(int x, int y) {		
-		stone.set(x, y);
-		omok.setPoint(x, y);	
+	public boolean set(int x, int y) {
+		if(!omok.isSame(x, y)) {
+			stone.set(x, y);
+			omok.setPoint(x, y);
+			return true;
+		}
+		return false;
 	}
 }
