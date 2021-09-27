@@ -19,7 +19,9 @@ public class SystemManager {
 			}
 			else{
 				ResourceLoader.getEnv(false);
-				new LoginWindow();
+				ConnectWindow connWind = new ConnectWindow();
+				new OmokWindow(connWind.getAgent());
+//				new LoginWindow();
 			}
 		}catch(Exception e){
 			catchException(ENVIRONMENT.SYSTEM, e);

@@ -34,9 +34,9 @@ public class OmokMouseListener extends MouseAdapter {
 		omok.addPutCommand(new StoneSetCommand() {
 			@Override
 			public void execute(int x, int y) {
-				set(x, y);				
-				put();
+				set(x, y);
 				omok.putAlone();
+				put();				
 			}			
 		});
 	}
@@ -50,13 +50,17 @@ public class OmokMouseListener extends MouseAdapter {
 				
 		if( x < 0 || x > 18 || y < 0 || y > 18) return;
 		
+		System.out.println("pos " + x + " " + y);
+				
 		set(x, y);
+		omok.predict();
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {				
 		if(!omok.isRunning() || !omok.isTurn()) return;			
 		
-		if(omok.isNull(x, y)) {
+		if(omok.isEmpty(x, y)) {
+			set(x,y);
 			omok.putWith();
 			put();
 		}		
@@ -72,10 +76,8 @@ public class OmokMouseListener extends MouseAdapter {
 			new MiniDialog(new JPanel(), "Omok");				
 	}
 	
-	public void set(int x, int y) {
-		if(!omok.isSame(x, y) && omok.isNull(x, y)) {
-			stone.set(x, y);
-			omok.predict();
-		}
+	public void set(int x, int y) {		
+		stone.set(x, y);
+		omok.setPoint(x, y);	
 	}
 }

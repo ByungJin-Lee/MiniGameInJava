@@ -29,20 +29,22 @@ public class Omok extends Game {
 	 * @return
 	 */
 	public boolean isSame(int x, int y) {
-		if(point.isSame(x, y))	return true;
+		if(point.isSame(x, y))	
+			return true;
 				
 		return false;
+	}
+	public void setPoint(int x, int y) {
+		point.setPoint(x, y);
 	}
 	/**
 	 * 현재 지점을 확인하고 위치 설정함
 	 * @param x
 	 * @param y
 	 */
-	public boolean isNull(int x, int y) {
-		if(board.isEmpty(x, y)) {
-			point.setPoint(x, y);
+	public boolean isEmpty(int x, int y) {
+		if(board.isEmpty(x, y))			
 			return true;
-		}
 		return false;
 	}
 	/**
