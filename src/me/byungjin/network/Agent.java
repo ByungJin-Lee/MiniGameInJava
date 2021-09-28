@@ -46,11 +46,6 @@ public abstract class Agent extends Thread {
 	 */
 	public abstract void close();
 
-	public void block(){
-		close();
-		interrupt();
-	}
-
 	/**
 	 * 연결 확인
 	 * @return
@@ -81,7 +76,7 @@ public abstract class Agent extends Thread {
 	 * @param source
 	 * @param data
 	 */
-	void comeInRouter(int identify, String data) {
+	boolean comeInRouter(int identify, String data) {
 		SystemManager.message(ENVIRONMENT.CLIENT, identify + " / " + data);
 		StringTokenizer tokens = new StringTokenizer(data);
 		
@@ -89,15 +84,17 @@ public abstract class Agent extends Thread {
 		case CHAT:			
 			if(chatComeInEvent != null)
 				chatComeInEvent.dispatch(this, data);			
-			break;
+			return false;
 		case GAME:
 			if(gameComeInEvent != null)
 				gameComeInEvent.dispatch(this, data);			
-			break;
+			return false;
+		case CUT_COMMU:			
+			return true;
 		default:			
 			if(otherComeInEvent != null) 
 				otherComeInEvent.dispatch(this, data);			
-			break;				
+			return false;				
 		}
 	}
 }

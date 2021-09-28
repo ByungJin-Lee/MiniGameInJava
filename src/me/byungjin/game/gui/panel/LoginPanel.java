@@ -25,22 +25,22 @@ public class LoginPanel extends JPanel {
          * Agent Setting
          */
         this.agent = agent;
-//        this.agent.addOtherComeInEvent(new DataComeInEvent() {
-//            @Override
-//            public void dispatch(Object source, String data) {
-//                StringTokenizer tokens = new StringTokenizer(data);
-//                switch(PROMISE.valueOf(tokens.nextToken())){
-//                    case LOGIN_SUC:
-//                        loginSuc();
-//                        break;
-//                    case LOGIN_FAIL:
-//                        loginFail();
-//                        break;
-//                    default:
-//                        break;
-//                }
-//            }
-//        });
+        this.agent.addOtherComeInEvent(new DataComeInEvent() {
+            @Override
+            public void dispatch(Object source, String data) {
+                StringTokenizer tokens = new StringTokenizer(data);
+                switch(PROMISE.valueOf(tokens.nextToken())){
+                    case LOGIN_SUC:
+                        loginSuc();
+                        break;
+                    case LOGIN_FAIL:
+                        loginFail();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
         /**
          * Panel Setting
          */
@@ -95,6 +95,8 @@ public class LoginPanel extends JPanel {
     }
 
     public void login(){
+    	if(checkAgent()) return;
+    	
         String id = idField.getText().trim();
         String pw = pwField.getText().trim();
 
@@ -118,5 +120,12 @@ public class LoginPanel extends JPanel {
     }
     public void message(String msg){
         messageLine.setText(msg);
+    }
+    public boolean checkAgent() {
+    	if(agent == null || !agent.isRunning()) {
+    		message("서버와 연결이 올바르지 않습니다.");
+    		return true;
+    	}    		
+    	return false;
     }
 }

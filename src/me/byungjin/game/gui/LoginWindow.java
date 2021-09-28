@@ -33,18 +33,30 @@ public class LoginWindow extends JFrame {
          * Agent Setting and display
          */
         try{
-//            agent = NetworkManager.getClientToServer();
-//            agent.open();
-//
+            agent = NetworkManager.getClientToServer();
+            agent.open();
+            
+            
+            while(true) {
+            	if(agent.isRunning()) {
+                    container.add(new LoginPanel(agent), BorderLayout.CENTER);
+                    con.add(container);
+
+                    setSize(getPreferredSize());
+                    setVisible(true);
+            		break;
+            	}
+            }
+           
 //            if(!agent.isRunning()) throw new Exception("Not connect Agent to Server!");
-
-            container.add(new LoginPanel(agent), BorderLayout.CENTER);
-            con.add(container);
-
-            setSize(getPreferredSize());
-            setVisible(true);
         }catch(Exception e){
             SystemManager.catchException(ENVIRONMENT.GUI, e);
         }
+    }
+    
+    public void close() {
+    	if(agent != null)
+    		agent.close();
+    	dispose();
     }
 }

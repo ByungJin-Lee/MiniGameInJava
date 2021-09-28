@@ -11,7 +11,7 @@ import javax.swing.border.LineBorder;
 public class ClientWindow extends JFrame {
 	private Agent agentToServer;
 	private Agent client;
-	
+
 	public ClientWindow(Agent agent) {
 		this.agentToServer = agent;
 		setUndecorated(true);
@@ -36,15 +36,16 @@ public class ClientWindow extends JFrame {
 		setVisible(true);
 	}
 
-	public void stopAgent(){
+	public void close(){
 		if(agentToServer == null && client == null) return;
 
-		if(agentToServer != null && agentToServer.isRunning()){
-			agentToServer.block();
-		}
+		if(agentToServer != null && agentToServer.isRunning())
+			agentToServer.close();
 
 		if(client != null && client.isRunning()){
-			client.block();
+			client.close();
 		}
+		
+		dispose();
 	}
 }

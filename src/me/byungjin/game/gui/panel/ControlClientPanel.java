@@ -19,6 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import me.byungjin.game.gui.ClientWindow;
+import me.byungjin.game.gui.LoginWindow;
 import me.byungjin.game.gui.listener.ControlPanelMouseListener;
 import me.byungjin.manager.SystemManager;
 import resource.ResourceLoader;
@@ -77,8 +79,13 @@ public class ControlClientPanel extends JPanel {
 		btn_exit.setBackground(Color.white);
 		btn_exit.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {				
-				((JFrame)SwingUtilities.getWindowAncestor((Component) e.getSource())).dispose();
+			public void actionPerformed(ActionEvent e) {	
+				JFrame window = (JFrame)SwingUtilities.getWindowAncestor((Component) e.getSource()); 
+				if(window instanceof LoginWindow)
+					((LoginWindow) window).close();
+				else
+					((ClientWindow)window).close();
+				
 			}
 		});
 		btn_exit.addMouseListener(new MouseAdapter() {

@@ -10,7 +10,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
 import me.byungjin.db.LogSchema;
-import me.byungjin.manager.SystemManager;
+import me.byungjin.manager.DBManager;
 import resource.ResourceLoader;
 
 public class TotalLogPage extends JTable {
@@ -19,7 +19,7 @@ public class TotalLogPage extends JTable {
 		setModel(model);
 		setFont(ResourceLoader.DEFAULT_FONT);
 		Vector<String> row;
-		ArrayList<LogSchema> logs = SystemManager.getLog(); 
+		ArrayList<LogSchema> logs = DBManager.getLog(); 
 		
 		if(logs == null) return;
 		

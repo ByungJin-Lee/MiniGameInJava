@@ -3,6 +3,7 @@ package me.byungjin.network;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import me.byungjin.manager.ENVIRONMENT;
@@ -23,7 +24,8 @@ public class Client extends Agent {
 	 * @throws Exception
 	 */
 	public Client() throws Exception {
-		sock = new Socket(ENVIRONMENT.SERVER_IP, ENVIRONMENT.SERVER_PORT.getValue());		
+		sock = new Socket();				
+		sock.connect(new InetSocketAddress(ENVIRONMENT.SERVER_IP, ENVIRONMENT.SERVER_PORT.getValue()), 3000);
 		init();
 	}
 	/**
@@ -72,8 +74,10 @@ public class Client extends Agent {
 		String buffer;
 		try {
 			while(sock.isConnected()) {
-				if((buffer = reader.readLine()) != null)
-					comeInRouter(identify, buffer);
+				if((buffer = reader.readLine()) != null) {					
+					if(comeInRouter(identify, buffer))
+						close();
+				}					
 			}							
 		}catch(Exception e) {
 			close();
@@ -109,14 +113,16 @@ public class Client extends Agent {
 	}
 	@Override
 	public void open() {
-		start();
+		start();	
 	}
 	@Override
 	public void close() {
 		try {
+			send(PROMISE.CUT_COMMU, "");
 			sender.close();
 			reader.close();
 			sock.close();			
+			interrupt();
 		}catch(Exception e) {			
 			SystemManager.catchException(ENVIRONMENT.CLIENT, e);
 		}

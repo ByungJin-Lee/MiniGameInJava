@@ -25,23 +25,23 @@ public class RegisterDialogPanel extends MiniDialogPanel {
          */
         this.agent = agent;
 
-//        agent.addOtherComeInEvent(new DataComeInEvent() {
-//            @Override
-//            public void dispatch(Object source, String data) {
-//                StringTokenizer tokens = new StringTokenizer(data);
-//                switch(PROMISE.valueOf(tokens.nextToken()))
-//                {
-//                    case REGISTER_SUC:
-//                        registerSuc();
-//                        break;
-//                    case REGISTER_FAIL:
-//                        registerFail(data.substring(data.indexOf(tokens.nextToken())));
-//                        break;
-//                    default:
-//                        break;
-//                }
-//            }
-//        });
+        agent.addOtherComeInEvent(new DataComeInEvent() {
+            @Override
+            public void dispatch(Object source, String data) {
+                StringTokenizer tokens = new StringTokenizer(data);
+                switch(PROMISE.valueOf(tokens.nextToken()))
+                {
+                    case REGISTER_SUC:
+                        registerSuc();
+                        break;
+                    case REGISTER_FAIL:
+                        registerFail(data.substring(data.indexOf(tokens.nextToken())));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
 
         /**
          * Panel Setting
@@ -86,6 +86,8 @@ public class RegisterDialogPanel extends MiniDialogPanel {
     }
 
     public void register(){
+    	if(checkAgent()) return;
+    	
         String id = idField.getText().trim();
         String pw = pwField.getText().trim();
 
@@ -98,6 +100,7 @@ public class RegisterDialogPanel extends MiniDialogPanel {
             message("재입력 비밀번호가 올바르지 않습니다.");
             return;
         }
+        message("");
 
         agent.send(PROMISE.REGISTER, id + " " + pw);
     }
@@ -113,4 +116,12 @@ public class RegisterDialogPanel extends MiniDialogPanel {
     public void message(String msg){
         messageLine.setText(msg);
     }
+    
+    public boolean checkAgent() {
+    	if(agent == null || !agent.isRunning()) {
+    		message("서버와 연결이 올바르지 않습니다.");
+    		return true;
+    	}    		
+    	return false;
+    }	
 }

@@ -5,7 +5,7 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 
 public class InnerPanel extends JPanel {
-	public InnerPanel() {			
+	public InnerPanel() {					
 		setLayout(new GridLayout(1,1));
 	}
 }

@@ -24,6 +24,6 @@ public class ServerStatusBanner extends BannerItem {
 		// TODO Auto-generated method stub
 		super.afterSelected();
 
-		dest.add(new ServerStatusPage(((ServerWindow)SwingUtilities.getWindowAncestor(this)).getAgent()));
+		dest.add(new ServerStatusPage((ServerWindow)SwingUtilities.getWindowAncestor(this)));
 	}
 }

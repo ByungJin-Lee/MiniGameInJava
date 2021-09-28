@@ -24,8 +24,8 @@ public class DBConnection {
 	 */
 	public DBConnection() {
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");		
-			conn = DriverManager.getConnection("jdbc:mysql://" + ENVIRONMENT.DB_IP + ":" + ENVIRONMENT.DB_PORT + "/jmini", ENVIRONMENT.DB_ID, ENVIRONMENT.DB_PW);
+			Class.forName("com.mysql.cj.jdbc.Driver");				
+			conn = DriverManager.getConnection("jdbc:mysql://" + ENVIRONMENT.DB_IP + ":" + ENVIRONMENT.DB_PORT + "/jmini?validationQuery=\"SELECT 1\"", ENVIRONMENT.DB_ID, ENVIRONMENT.DB_PW);
 			smt = conn.createStatement();
 			isConnect = true;
 			SystemManager.message(ENVIRONMENT.DB, "Connection Success!!");
@@ -61,8 +61,8 @@ public class DBConnection {
 	public boolean confirmUser(String id, String password) {
 		String sql = "SELECT COUNT(*) as cnt From User Where id='" + id + "' AND Pw='" + password + "'";
 		try {
-			rs = smt.executeQuery(sql);
-			if(rs.getInt(1) > 0) {
+			rs = smt.executeQuery(sql);			
+			if(rs.next() && rs.getInt(1) > 0) {
 				SystemManager.message(ENVIRONMENT.DB, "login User(" + id + ", " + password + ")");
 				return true;
 			}			

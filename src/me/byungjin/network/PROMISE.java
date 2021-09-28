@@ -14,6 +14,8 @@ public enum PROMISE {
 	
 	/* Bulls And Cows */
 	THROW(305), THROW_RESULT(306)
+	
+	, CUT_CONNECTION(307)
 	;
 	
 	

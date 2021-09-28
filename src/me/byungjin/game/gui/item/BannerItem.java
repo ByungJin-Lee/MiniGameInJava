@@ -25,6 +25,6 @@ public abstract class BannerItem extends Item {
 	}
 	@Override
 	public void afterSelected() {		
-		SystemManager.message(ENVIRONMENT.SERVER, getText() + " was Clicked.");
+//		SystemManager.message(ENVIRONMENT.SERVER, getText() + " was Clicked.");
 	}
 }

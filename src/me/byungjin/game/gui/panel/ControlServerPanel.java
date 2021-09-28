@@ -13,34 +13,39 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import me.byungjin.game.gui.listener.ControlPanelMouseListener;
-import me.byungjin.game.gui.listener.ControlRunningMouseListener;
+import me.byungjin.manager.DBManager;
 import me.byungjin.manager.SystemManager;
 import resource.ResourceLoader;
 
 public class ControlServerPanel extends JPanel {
+	private JLabel dbLabel;
+	private JLabel serverLabel;
+	
 	public ControlServerPanel() {
 		Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 //		setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
 		setPreferredSize(new Dimension(10, 25));
 		FlowLayout flowLayout = (FlowLayout) getLayout();
-		flowLayout.setHgap(0);
+		flowLayout.setHgap(5);
 		flowLayout.setVgap(0);
 		flowLayout.setAlignment(FlowLayout.RIGHT);
 		setBackground(Color.WHITE);
 		
-		JToggleButton btn_running = new JToggleButton();
-		btn_running.setContentAreaFilled(false);
-		btn_running.setBorderPainted(false);
-		btn_running.setFocusPainted(false);
-		btn_running.setCursor(hand);
-		btn_running.setIcon(ResourceLoader.ICON_SWITCH_OFF);
-		btn_running.addMouseListener(new ControlRunningMouseListener());
-		add(btn_running);
+		dbLabel = new JLabel("DB");
+		dbLabel.setFont(ResourceLoader.DEFAULT_FONT);
+		dbLabel.setForeground(Color.red);
+		serverLabel = new JLabel("SERV");
+		serverLabel.setFont(ResourceLoader.DEFAULT_FONT);
+		serverLabel.setForeground(Color.red);
+		
+		add(dbLabel);
+		add(serverLabel);
 		
 		JButton btn_minimize = new JButton("_");
 		btn_minimize.setForeground(Color.LIGHT_GRAY);
@@ -68,7 +73,7 @@ public class ControlServerPanel extends JPanel {
 		btn_exit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SystemManager.disconnectDB();
+				DBManager.disconnectDB();
 				((JFrame)SwingUtilities.getWindowAncestor((Component) e.getSource())).dispose();
 			}
 		});
@@ -88,7 +93,19 @@ public class ControlServerPanel extends JPanel {
 		
 		ControlPanelMouseListener controlAdapter = new ControlPanelMouseListener();
 		addMouseListener(controlAdapter);
-		addMouseMotionListener(controlAdapter);
-		
+		addMouseMotionListener(controlAdapter);		
+	}
+	
+	public void serverOpen() {
+		serverLabel.setForeground(Color.green);
+	}
+	public void serverClose() {
+		serverLabel.setForeground(Color.red);
+	}
+	public void dbOpen() {
+		dbLabel.setForeground(Color.green);
+	}
+	public void dbClose() {
+		dbLabel.setForeground(Color.red);
 	}
 }

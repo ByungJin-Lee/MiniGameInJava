@@ -21,6 +21,7 @@ import me.byungjin.game.gui.panel.InnerPanel;
 import me.byungjin.game.gui.panel.MenuPanel;
 import me.byungjin.manager.ENVIRONMENT;
 import me.byungjin.manager.NetworkManager;
+import me.byungjin.manager.DBManager;
 import me.byungjin.manager.SystemManager;
 import me.byungjin.network.Agent;
 import me.byungjin.network.Client;
@@ -28,9 +29,13 @@ import me.byungjin.network.PROMISE;
 import me.byungjin.network.event.DataComeInEvent;
 
 public class ServerWindow extends JFrame {
+	public static Color INNER_BGCOLOR = new Color(244,247,252);
+	
+	
 	private Agent agent;
 	private BannerPanel panel_banner;
 	private InnerPanel panel_inner;
+	private ControlServerPanel controlServerPanel;
 	private DBConnection conn;
 	private String cmdDetail;
 	
@@ -52,24 +57,22 @@ public class ServerWindow extends JFrame {
 		panel_right.setLayout(new BorderLayout(5, 0));
 		
 		//Control
-					
-		panel_right.add(new ControlServerPanel(), BorderLayout.NORTH);			
+		controlServerPanel = new ControlServerPanel();	
+		panel_right.add(controlServerPanel, BorderLayout.NORTH);			
 		
 		//Banner
 		panel_banner = new BannerPanel();
 		panel_right.add(panel_banner, BorderLayout.WEST);
 		
-		//Container
-		Color color_container = new Color(244,247,252);
-		
+		//Container				
 		JPanel panel_container = new JPanel();
 		panel_container.setBorder(new LineBorder(Color.LIGHT_GRAY, 1, true));
-		panel_container.setBackground(color_container);
+		panel_container.setBackground(INNER_BGCOLOR);
 		panel_container.setLayout(new GridLayout(0, 1, 0, 0));
 		panel_right.add(panel_container, BorderLayout.CENTER);				
 		
 		JPanel panel_padding = new JPanel();		
-		panel_padding.setBackground(color_container);
+		panel_padding.setBackground(INNER_BGCOLOR);
 		panel_padding.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		
 		JScrollPane scroll = new JScrollPane(panel_padding); 
@@ -80,7 +83,7 @@ public class ServerWindow extends JFrame {
 		
 		//Inner		
 		panel_inner = new InnerPanel();		
-		panel_inner.setBackground(color_container);		
+		panel_inner.setBackground(INNER_BGCOLOR);		
 		panel_padding.add(panel_inner);
 		
 		//Menu
@@ -100,34 +103,72 @@ public class ServerWindow extends JFrame {
 	public Agent getAgent(){
 		return agent;
 	}
-
+	/**
+	 * DB 연결 생성
+	 * @return
+	 */
+	public boolean openDB() {
+		DBManager.connectDB();
+		conn = DBManager.getDBConn();
+		if(conn!=null && conn.isConnect) {
+			controlServerPanel.dbOpen();
+			return true;
+		}			
+		return false;
+	}
 	/**
 	 * 서버 생성
 	 * @return
 	 */
-	public boolean openServer(){
-		SystemManager.connectDB();
-		conn = SystemManager.getDBConn();
+	public boolean openServer() {
 		if(agent != null){
-			if(!agent.isRunning())
-				agent.open();
-			return true;
-		}else{
-			try{
-				agent = NetworkManager.getServer();
-				agent.addOtherComeInEvent(new DataComeInEvent() {
-					@Override
-					public void dispatch(Object source, String data) {
-						command((Client)source, data);
-					}
-				});
-				agent.open();
+			agent.close();			
+			if(makeServer()) {
+				controlServerPanel.serverOpen();
 				return true;
-			}catch(Exception e){
-				SystemManager.catchException(ENVIRONMENT.GUI, e);
-				return false;
+			}										
+		}else{
+			if(makeServer()) {
+				controlServerPanel.serverOpen();
+				return true;
 			}
 		}
+		return false;
+	}
+
+	public boolean makeServer() {
+		try{
+			agent = NetworkManager.getServer();
+			agent.addOtherComeInEvent(new DataComeInEvent() {
+				@Override
+				public void dispatch(Object source, String data) {
+					command((Client)source, data);
+				}
+			});
+			agent.open();
+			controlServerPanel.serverOpen();
+			return true;
+		}catch(Exception e){
+			SystemManager.catchException(ENVIRONMENT.GUI, e);
+			controlServerPanel.serverClose();
+			return false;
+		}
+	}
+	/**
+	 * 서버 중지
+	 */
+	public void stopServer(){		
+		if(agent == null) return;
+
+		if(agent.isRunning()){
+			agent.close();
+		}
+		controlServerPanel.serverClose();
+	}
+	public void stopDB() {
+		if(conn != null && conn.isConnect)
+			conn.close();
+		controlServerPanel.dbClose();
 	}
 
 	/**
@@ -177,16 +218,11 @@ public class ServerWindow extends JFrame {
 	private void send(Client target, PROMISE tag, String data){
 		if(target.isRunning())
 			target.send(tag, data);
-	}
-
-	/**
-	 * 서버 중지
-	 */
-	public void stopServer(){
-		if(agent == null) return;
-
-		if(agent.isRunning()){
-			agent.block();
-		}
+	}	
+	
+	public boolean isServerRunning() {
+		if(agent != null && agent.isRunning())
+			return true;
+		return false;
 	}
 }

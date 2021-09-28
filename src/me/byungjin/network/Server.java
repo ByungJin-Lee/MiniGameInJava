@@ -104,6 +104,7 @@ public class Server extends Agent {
 		}catch(Exception e) {
 			SystemManager.catchException(ENVIRONMENT.SERVER, e);
 		}
+		interrupt();
 		running = false;
 	}	
 	@Override
