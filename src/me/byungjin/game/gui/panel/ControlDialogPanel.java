@@ -27,7 +27,7 @@ public class ControlDialogPanel extends JPanel {
 		Cursor hand = new Cursor(Cursor.HAND_CURSOR);
 		setBackground(Color.WHITE);
 //		setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
-		setPreferredSize(new Dimension(10, 25));
+		setPreferredSize(new Dimension(10, 30));
 		setLayout(new GridLayout(1, 2));
 		
 		JPanel left = new JPanel();
@@ -35,7 +35,7 @@ public class ControlDialogPanel extends JPanel {
 		FlowLayout flowLayout_left = (FlowLayout) left.getLayout();
 		flowLayout_left.setAlignment(FlowLayout.LEFT);
 		JLabel tit = new JLabel(title);
-		tit.setFont(ResourceLoader.DEFAULT_FONT);
+		tit.setFont(ResourceLoader.H_FONT);
 		tit.setForeground(Color.gray);
 		left.add(tit);
 		

@@ -15,12 +15,16 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import me.byungjin.db.DBConnection;
+import me.byungjin.db.Rank;
+import me.byungjin.game.GameKind;
+import me.byungjin.game.Room;
 import me.byungjin.game.gui.panel.BannerPanel;
 import me.byungjin.game.gui.panel.ControlServerPanel;
 import me.byungjin.game.gui.panel.InnerPanel;
 import me.byungjin.game.gui.panel.MenuPanel;
 import me.byungjin.manager.ENVIRONMENT;
 import me.byungjin.manager.NetworkManager;
+import me.byungjin.manager.RoomManager;
 import me.byungjin.manager.DBManager;
 import me.byungjin.manager.SystemManager;
 import me.byungjin.network.Agent;
@@ -29,8 +33,7 @@ import me.byungjin.network.PROMISE;
 import me.byungjin.network.event.DataComeInEvent;
 
 public class ServerWindow extends JFrame {
-	public static Color INNER_BGCOLOR = new Color(244,247,252);
-	
+	public static Color INNER_BGCOLOR = new Color(244,247,252);	
 	
 	private Agent agent;
 	private BannerPanel panel_banner;
@@ -94,6 +97,7 @@ public class ServerWindow extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
+				stopDB();
 				stopServer();
 			}
 		});
@@ -121,6 +125,8 @@ public class ServerWindow extends JFrame {
 	 * @return
 	 */
 	public boolean openServer() {
+		RoomManager.init();
+		
 		if(agent != null){
 			agent.close();			
 			if(makeServer()) {
@@ -157,6 +163,7 @@ public class ServerWindow extends JFrame {
 	/**
 	 * 서버 중지
 	 */
+		
 	public void stopServer(){		
 		if(agent == null) return;
 
@@ -185,6 +192,21 @@ public class ServerWindow extends JFrame {
 			case REGISTER:
 				send(source, register(tokens.nextToken(), tokens.nextToken()), cmdDetail);
 				break;
+			case ROOM:
+				send(source, room(source.getSocketIP(), tokens.nextToken(), tokens.nextToken(), tokens.nextToken(), tokens.nextToken()), cmdDetail);
+				break;
+			case ROOM_LIST:
+				sendRoomList(source);
+				break;
+			case ROOM_END:
+				roomEnd(tokens.nextToken());
+				break;
+			case RANK:
+				send(source, rank(tokens.nextToken(), GameKind.valueOf(tokens.nextToken())), cmdDetail);
+				break;
+			case RANK_UPDATE:
+				rank_update(new Rank(tokens.nextToken(), GameKind.valueOf(tokens.nextToken()), Integer.parseInt(tokens.nextToken()), Integer.parseInt(tokens.nextToken())));
+				break;
 			default:
 				break;
 		}
@@ -198,6 +220,70 @@ public class ServerWindow extends JFrame {
 			return PROMISE.LOGIN_SUC;
 		return PROMISE.LOGIN_FAIL;
 	}
+	
+	private PROMISE rank(String id, GameKind k) {
+		cmdDetail = "";
+		if(conn == null || !conn.isConnect) return PROMISE.RANK_FAIL;
+		
+		Rank rank;
+		if((rank = conn.getRank(id, k)) != null) {
+			cmdDetail = rank.toString();
+			return PROMISE.RANK_RETURN;
+		}
+		return PROMISE.RANK_FAIL;
+	}
+	
+	private void rank_update(Rank r) {
+		cmdDetail = "";
+		if(conn == null || !conn.isConnect) return;
+						
+		conn.updateRank(r);
+	}
+	
+	private void sendRoomList(Client source) {		
+		try {
+			Thread room_send_thread = new Thread(new Runnable() {
+				@Override
+				public void run() {				
+					String hostIp = source.getSocketIP();
+					
+					send(source, PROMISE.ROOM_LIST, "");
+					for(Room r : RoomManager.getRoomVector()) {
+						if(r.isLan(hostIp)) {
+							send(source, PROMISE.ROOM_ITEM, r.toItemStrLan());
+						}else {							
+							send(source, PROMISE.ROOM_ITEM, r.toItemStr());
+						}
+					}
+					send(source, PROMISE.ROOM_LIST_END, "");
+				}
+			});
+			room_send_thread.start();
+		}catch(Exception e) {
+			SystemManager.catchException(ENVIRONMENT.SERVER, e);
+		}	
+	}
+	
+	private PROMISE room(String ip, String innerIp, String name, String kind, String pw) {
+		Room newRoom;
+		if(pw.equals("!!!!!"))
+			newRoom = new Room(ip, name, GameKind.valueOf(kind));
+		else
+			newRoom = new Room(ip, name, pw, GameKind.valueOf(kind));
+		newRoom.setInnerIp(innerIp);
+		if(RoomManager.add(newRoom)) {
+			cmdDetail = "방 생성 완료";
+			return PROMISE.ROOM_SUC;
+		}else {
+			cmdDetail = "같은 이름의 방이 존재함";
+			return PROMISE.ROOM_FAIL;
+		}		
+	}
+	
+	private void roomEnd(String name) {
+		RoomManager.remove(new Room(null, name, null));
+	}
+	
 	private PROMISE register(String id, String pw){
 		cmdDetail = "서버 오류!";
 		if(conn == null || !conn.isConnect) return PROMISE.REGISTER_FAIL;

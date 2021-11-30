@@ -74,7 +74,7 @@ public class Server extends Agent {
 	}
 	@Override
 	public void chat(String str) {
-		send(PROMISE.CHAT, nick + " " + str);
+		send(PROMISE.CHAT, str);
 	}
 	@Override
 	public void send(PROMISE type, String str) {

@@ -5,7 +5,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
-import me.byungjin.game.gui.MiniDialog;
+import me.byungjin.game.GameEndEvent;
 import me.byungjin.game.omock.BadukBoard;
 import me.byungjin.game.omock.Omok;
 import me.byungjin.game.omock.StoneSetCommand;
@@ -20,8 +20,9 @@ public class OmokMouseListener extends MouseAdapter {
 	private Omok omok;
 	private JPanel panel;
 	
-	public OmokMouseListener(OmokPanel panel, Agent agent) {
+	public OmokMouseListener(OmokPanel panel, Agent agent, Agent toServer, GameEndEvent l) {
 		omok = new Omok(agent);
+		omok.setGameEndEvent(l);
 		stone = new StoneLabel(type);
 		this.panel = panel;
 		panel.add(stone);
@@ -39,6 +40,7 @@ public class OmokMouseListener extends MouseAdapter {
 				put();				
 			}			
 		});
+		
 	}
 	
 	@Override
@@ -69,9 +71,7 @@ public class OmokMouseListener extends MouseAdapter {
 		type = StoneType.reverse(type);
 		stone = new StoneLabel(type);
 		panel.add(stone);
-		ResourceLoader.playWav("game/stone_put_wav.WAV");
-		if(omok.isWinOrLose(type) > -1)
-			new MiniDialog(new JPanel(), "Omok");				
+		ResourceLoader.playWav("game/stone_put_wav.WAV");				
 	}
 	
 	public boolean set(int x, int y) {

@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import me.byungjin.manager.ENVIRONMENT;
 import me.byungjin.manager.SystemManager;
@@ -67,6 +68,9 @@ public class Client extends Agent {
 	public int getIdentify() {
 		return identify;
 	}
+	public String getSocketIP() {		
+		return this.sock.getInetAddress().getHostAddress();
+	}	
 	@Override
 	public void run() {
 		running = true;
@@ -99,7 +103,7 @@ public class Client extends Agent {
 	}
 	@Override
 	public void chat(String str) {
-		send(PROMISE.CHAT, nick + " " +str);
+		send(PROMISE.CHAT, str);
 	}	
 	@Override
 	public void send(PROMISE type, String str) {				

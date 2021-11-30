@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import me.byungjin.game.GameKind;
 import me.byungjin.manager.ENVIRONMENT;
 import me.byungjin.manager.SystemManager;
 
@@ -110,6 +111,54 @@ public class DBConnection {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Rank 가져오기
+	 * @return
+	 */
+	public Rank getRank(String id, GameKind kind) {
+		Rank rank;
+		try {
+			rs = smt.executeQuery("SELECT * From user_rank Where id='" + id + "' AND Kind=" + kind.toValue());
+			if(rs.next()) {
+				rank = new Rank(id, kind, rs.getInt(3), rs.getInt(4));
+			}else {
+				rank = new Rank(id, kind);
+			}
+			return rank;
+		} catch (SQLException e) {
+			SystemManager.catchException(ENVIRONMENT.DB, e);			
+		}
+		return null;
+	}
+	/**
+	 * 랭크 업데이트
+	 * @param rank 
+	 */
+	public void updateRank(Rank rank) {
+		try {
+			if((rank.getVictory() + rank.getLose()) == 1) {
+				String sql = "INSERT INTO user_rank (Id, Kind, Victory, Lose) VALUES (?,?,?,?)";
+				pstm = conn.prepareStatement(sql);
+				pstm.setString(1, rank.getId());
+				pstm.setInt(2, rank.getGameKind().toValue());				
+				pstm.setInt(3, rank.getVictory());
+				pstm.setInt(4, rank.getLose());
+				pstm.executeUpdate();				
+			}else {
+				String sql = "UPDATE user_rank set Victory=?, Lose=? WHERE Id=? AND Kind=?";
+				pstm = conn.prepareStatement(sql);
+				pstm.setInt(1, rank.getVictory());
+				pstm.setInt(2, rank.getLose());
+				pstm.setString(3, rank.getId());
+				pstm.setInt(4, rank.getGameKind().toValue());				
+				pstm.executeUpdate();
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * DB에 저장된 로그를 가져옴
 	 * @return

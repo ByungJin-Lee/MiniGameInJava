@@ -1,5 +1,8 @@
 package me.byungjin.manager;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 import me.byungjin.game.gui.*;
 import resource.ResourceLoader;
 
@@ -13,21 +16,23 @@ public class SystemManager {
 			}
 			else{
 				ResourceLoader.getEnv(false);
-				new LoginWindow();
-			}
+				new ClientWindow();
+			}						
 		}catch(Exception e){
 			catchException(ENVIRONMENT.SYSTEM, e);
 		}			
 	}
 		
 	static public void catchException(ENVIRONMENT tag, Exception e) {		
-		System.out.println("warning! " + tag + " - " + e.getMessage());
-//		e.printStackTrace();
-		DBManager.log(tag, e.getMessage(), true);
+		System.out.println("warning! " + tag + " - " + e.getMessage());				
+		DBManager.log(tag, "" + e.getMessage(), true);
 	}
 	static public void message(ENVIRONMENT tag, String str) {
 		System.out.println(": " + tag + " - " + str);
 		DBManager.log(tag, str, false);
 	}		
-
+	
+	static public String getTime() {
+		return LocalTime.now().format(DateTimeFormatter.ofPattern("a h:m:s"));
+	}
 }

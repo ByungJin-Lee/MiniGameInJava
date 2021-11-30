@@ -14,11 +14,11 @@ public class DBManager {
 		return conn;
 	}
 	static public void disconnectDB() {
-		if(conn != null && conn.isConnect)
+		if(isConnection())
 			conn.close();
 	}
 	static public ArrayList<LogSchema> getLog() {
-		if(conn != null && conn.isConnect)
+		if(isConnection())
 			return conn.getLog();
 		return null;
 	}
@@ -26,10 +26,11 @@ public class DBManager {
 		return conn;
 	}
 	static public void log(ENVIRONMENT tag, String str, boolean warning) {
-		if(conn != null && conn.isConnect) {
+		if(isConnection()) {
 			conn.log(tag, str, warning);
 		}
-	}
+	}	
+	
 	static public boolean isConnection() {
 		if(conn != null && conn.isConnect)
 			return true;

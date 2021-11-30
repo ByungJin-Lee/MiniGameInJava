@@ -20,17 +20,18 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import me.byungjin.game.gui.ClientWindow;
-import me.byungjin.game.gui.LoginWindow;
 import me.byungjin.game.gui.listener.ControlPanelMouseListener;
-import me.byungjin.manager.SystemManager;
+
 import resource.ResourceLoader;
 
 public class ControlClientPanel extends JPanel {
+	final Color bgColor = Color.white;
+	final Color frColor = Color.gray;
+	
 	public ControlClientPanel(String title) {
-		Cursor hand = new Cursor(Cursor.HAND_CURSOR);
-//		setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
-		setPreferredSize(new Dimension(10, 25));
-		setBackground(Color.WHITE);
+		Cursor hand = new Cursor(Cursor.HAND_CURSOR);		
+		setPreferredSize(new Dimension(10, 28));
+		setBackground(Color.gray);
 		setLayout(new GridLayout(1,2));
 		
 		JPanel right = new JPanel();
@@ -38,7 +39,7 @@ public class ControlClientPanel extends JPanel {
 		flowLayout_right.setHgap(0);
 		flowLayout_right.setVgap(0);
 		flowLayout_right.setAlignment(FlowLayout.RIGHT);
-		right.setBackground(Color.WHITE);	
+		right.setBackground(bgColor);	
 		
 		
 		JPanel left = new JPanel();
@@ -46,12 +47,12 @@ public class ControlClientPanel extends JPanel {
 		flowLayout_left.setHgap(0);
 		flowLayout_left.setVgap(0);
 		flowLayout_left.setAlignment(FlowLayout.LEFT);
-		left.setBackground(Color.WHITE);
+		left.setBackground(bgColor);
 		left.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 0));
 		
 		JLabel label = new JLabel(title);
-		label.setFont(ResourceLoader.DEFAULT_FONT);
-		label.setForeground(Color.gray);
+		label.setFont(ResourceLoader.H_FONT);
+		label.setForeground(frColor);
 		left.add(label);			
 		
 		JButton btn_minimize = new JButton("_");
@@ -76,16 +77,13 @@ public class ControlClientPanel extends JPanel {
 		btn_exit.setBackground(Color.PINK);
 		btn_exit.setCursor(hand);
 		btn_exit.setOpaque(true);
-		btn_exit.setBackground(Color.white);
+		btn_exit.setBackground(bgColor);
 		btn_exit.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {	
-				JFrame window = (JFrame)SwingUtilities.getWindowAncestor((Component) e.getSource()); 
-				if(window instanceof LoginWindow)
-					((LoginWindow) window).close();
-				else
-					((ClientWindow)window).close();
-				
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("EXIT");
+				ClientWindow window = (ClientWindow)SwingUtilities.getWindowAncestor((Component) e.getSource()); 						
+				window.dispose();
 			}
 		});
 		btn_exit.addMouseListener(new MouseAdapter() {
@@ -96,7 +94,7 @@ public class ControlClientPanel extends JPanel {
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btn_exit.setBackground(Color.white);
+				btn_exit.setBackground(bgColor);
 				btn_exit.setForeground(Color.LIGHT_GRAY);
 			}
 		});

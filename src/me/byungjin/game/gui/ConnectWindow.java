@@ -120,4 +120,11 @@ public class ConnectWindow extends JFrame {
 			}
 		}
 	}
+
+	@Override
+	public void dispose() {
+		if(agent != null && agent.isRunning())
+			agent.close();
+		super.dispose();
+	}
 }

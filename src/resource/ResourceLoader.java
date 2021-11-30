@@ -24,6 +24,10 @@ public class ResourceLoader {
 	 * 시스템 기본 적용 폰트
 	 */
 	static public Font DEFAULT_FONT;
+	static public Font DEFAULT_FONT12;
+	static public Font DEFAULT_FONT14;
+	static public ImageIcon DEFAULT_USER;
+	static public Font H_FONT;
 	
 	static public ImageIcon ICON_MONITER;
 	static public ImageIcon ICON_MONITER_SELECTED;
@@ -47,12 +51,21 @@ public class ResourceLoader {
 	 */
 	static public void readFont() {					
 		InputStream is = ResourceLoader.class.getResourceAsStream("fonts/NanumSquareRoundB.ttf");
+		InputStream kis = ResourceLoader.class.getResourceAsStream("fonts/Hahmlet-Regular.ttf");
 		try {
 			DEFAULT_FONT = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(15f).deriveFont(Font.BOLD);
+			DEFAULT_FONT12 =  DEFAULT_FONT.deriveFont(12f);
+			DEFAULT_FONT14 = DEFAULT_FONT.deriveFont(14f);
+			H_FONT = Font.createFont(Font.TRUETYPE_FONT, kis).deriveFont(15f).deriveFont(Font.PLAIN);
 			SystemManager.message(ENVIRONMENT.RESOURCELOADER, "load Font");
 		} catch (Exception e) {			
 			SystemManager.catchException(ENVIRONMENT.RESOURCELOADER, e);
 		}
+	}
+	
+	static public void readDefaultUser() {
+		DEFAULT_USER = new ImageIcon(ResourceLoader.class.getResource("game/default_user.png"));
+		SystemManager.message(ENVIRONMENT.RESOURCELOADER, "load User Icon");
 	}
 	/**
 	 * 아이콘 파일을 읽어옴
@@ -78,6 +91,14 @@ public class ResourceLoader {
 	static public Image readBoard() {
 		SystemManager.message(ENVIRONMENT.RESOURCELOADER, "load Board");
 		return new ImageIcon(ResourceLoader.class.getResource("game/baduk_board.png")).getImage();		
+	}
+	static public Image readBackground(String name) {
+		SystemManager.message(ENVIRONMENT.RESOURCELOADER, "load Background : " + name);
+		return new ImageIcon(ResourceLoader.class.getResource("background/"+ name)).getImage();
+	}
+	static public ImageIcon readIcon(String name) {
+		SystemManager.message(ENVIRONMENT.RESOURCELOADER, "load Icon : " + name);
+		return new ImageIcon(ResourceLoader.class.getResource("background/"+ name));
 	}
 	/**
 	 * IP 등 환경 설정 파일을 읽을(파일이 없는 경우 기본 파일 생성)

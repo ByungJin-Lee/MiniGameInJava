@@ -15,8 +15,7 @@ public abstract class MenuItem extends Item {
 		selectedIcon = sel;
 		setIcon(defaultIcon);
 	}	
-					
-	
+
 	@Override
 	public void hover() {
 		setIcon(selectedIcon);

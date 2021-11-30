@@ -50,7 +50,7 @@ public class NetworkManager {
 		try {
 			return InetAddress.getLocalHost().getHostAddress();
 		}catch(Exception e) {
-			return "Error : can't get Address!";
+			return "000";
 		}
 	}
 }

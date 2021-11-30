@@ -3,7 +3,12 @@ package me.byungjin.game.omock;
 import java.util.StringTokenizer;
 
 import me.byungjin.game.Game;
+import me.byungjin.game.GameEndEvent;
+import me.byungjin.game.GameKind;
 import me.byungjin.game.Point;
+import me.byungjin.game.gui.PopUpDialog;
+import me.byungjin.manager.ENVIRONMENT;
+import me.byungjin.manager.SystemManager;
 import me.byungjin.network.Agent;
 import me.byungjin.network.Client;
 import me.byungjin.network.PROMISE;
@@ -14,7 +19,8 @@ public class Omok extends Game {
 	private BadukBoard board;	
 	private Point point;
 	private StoneSetCommand predictCommand;
-	private StoneSetCommand putCommand;
+	private StoneSetCommand putCommand;	
+	private GameEndEvent endEvent;
 			
 	public Omok(Agent agent) {		
 		super(agent);
@@ -52,7 +58,13 @@ public class Omok extends Game {
 	 */
 	public void putWith() {
 		board.put(point.getX(), point.getY(), mine);
+		isWinOrLose(mine);
 		turn = false;
+		
+		if(agent == null || !agent.isRunning()) {
+			endEvent.dispatch(GameKind.OMOK, true);
+		}
+		
 		send(PROMISE.PUT, point.getX() + " " + point.getY());		
 	}	
 	/**
@@ -63,6 +75,7 @@ public class Omok extends Game {
 	 */
 	public void putAlone() {		
 		board.put(point.getX(), point.getY(), StoneType.reverse(mine));
+		isWinOrLose(StoneType.reverse(mine));
 	}
 	/**
 	 * 바둑돌 예상 위치 전송
@@ -93,13 +106,18 @@ public class Omok extends Game {
 	public void addPutCommand(StoneSetCommand cmd) {
 		this.putCommand = cmd;
 	}
+	public void setGameEndEvent(GameEndEvent e) {
+		this.endEvent = e;
+	}
+	
+	
 
 	@Override
 	public void command(Object source, String request) {		
 		StringTokenizer tokens = new StringTokenizer(request);
 		tokens.nextToken();
 		switch(PROMISE.valueOf(tokens.nextToken())) {
-		case READY:			
+		case READY:
 			send(PROMISE.READY_TOO, "");
 			mine = StoneType.WHITE;
 			turn = true;
@@ -108,7 +126,7 @@ public class Omok extends Game {
 		case READY_TOO:			
 			mine = StoneType.BLACK;
 			turn = false;
-			running = true;			
+			running = true;
 			break;
 		case PREDICT:
 			if(predictCommand != null)
@@ -154,14 +172,36 @@ public class Omok extends Game {
 				|| countStonesWithDirection(-1, 1, type) + countStonesWithDirection(1, -1, type) == 4
 				|| countStonesWithDirection(0, 1, type) + countStonesWithDirection(0, -1, type) == 4
 				|| countStonesWithDirection(1, 0, type) + countStonesWithDirection(-1, 0, type) == 4) {			
-			running = false;
+			running = false;			
+			
+			if(mine == type) {
+				endEvent.dispatch(GameKind.OMOK, true);
+				new PopUpDialog("승리!");
+			}else {
+				endEvent.dispatch(GameKind.OMOK, false);
+				new PopUpDialog("패배!");
+			}
+			
 			return mine == type ? 1 : 0;
 		}						
 		return -1;
 	}	
 	@Override
 	public void init() {
-		if(agent instanceof Client)
-			send(PROMISE.READY, "");
+		Thread wa = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while(!running) {
+					try {
+						Thread.sleep(100);
+						if(agent instanceof Client)
+							send(PROMISE.READY, "");
+					}catch(Exception e){
+						SystemManager.catchException(ENVIRONMENT.GUI, e);
+					}
+				}
+			}
+		});
+		wa.start();
 	}
 }

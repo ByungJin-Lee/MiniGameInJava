@@ -7,13 +7,17 @@ import java.awt.GridLayout;
 
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import me.byungjin.game.gui.listener.MiniDialogWorkListener;
 import me.byungjin.game.gui.panel.ControlDialogPanel;
 
 public class MiniDialog extends JDialog {
-	public MiniDialog(JPanel content, String text) {		
+	private MiniDialogWorkListener dialogWorkComplete;
+	
+	public MiniDialog(JPanel content, String text, MiniDialogWorkListener l) {
+		setModal(true);
+		this.dialogWorkComplete = l;
 		setUndecorated(true);		
 		setLayout(new GridLayout(1,1));		
 		setMinimumSize(new Dimension(200,100));
@@ -25,14 +29,15 @@ public class MiniDialog extends JDialog {
 		
 		container.add(new ControlDialogPanel(text), BorderLayout.NORTH);
 		
-		JPanel padding = new JPanel();
-		padding.setLayout(new GridLayout(1,1));
-		padding.setBorder(new EmptyBorder(5, 5, 5, 5));
-		padding.add(content);			
 		
-		container.add(padding, BorderLayout.CENTER);
+		container.add(content, BorderLayout.CENTER);
 		add(container);
-		setSize(getPreferredSize());
+		setSize(content.getWidth(), content.getHeight() + 30);
 		setVisible(true);
+	}	
+	
+	public void dispatchCompleteEvent(Object obj) {
+		if(dialogWorkComplete != null)
+			dialogWorkComplete.completeDialogTask(obj);
 	}
 }
