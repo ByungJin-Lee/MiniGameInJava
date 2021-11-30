@@ -245,11 +245,12 @@ public class ServerWindow extends JFrame {
 			Thread room_send_thread = new Thread(new Runnable() {
 				@Override
 				public void run() {				
-					String hostIp = source.getSocketIP();
+					String hostIp = source.getSocketIP();					
 					
 					send(source, PROMISE.ROOM_LIST, "");
 					for(Room r : RoomManager.getRoomVector()) {
 						if(r.isLan(hostIp)) {
+							System.out.println("LAN");
 							send(source, PROMISE.ROOM_ITEM, r.toItemStrLan());
 						}else {							
 							send(source, PROMISE.ROOM_ITEM, r.toItemStr());
@@ -265,6 +266,8 @@ public class ServerWindow extends JFrame {
 	}
 	
 	private PROMISE room(String ip, String innerIp, String name, String kind, String pw) {
+		if(ip.equals("172.30.1.254")) //Server GateWay IP
+			ip = "121.146.245.59";		
 		Room newRoom;
 		if(pw.equals("!!!!!"))
 			newRoom = new Room(ip, name, GameKind.valueOf(kind));

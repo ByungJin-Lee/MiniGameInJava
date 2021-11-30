@@ -14,7 +14,7 @@ public class LandingPanel extends ChildPanel {
 		setBackground(new Color(225,239,250));
 		setLayout(null);
 		
-		setPreferredSize(new Dimension(1400, 900));
+		setPreferredSize(new Dimension(1300, 800));
 		setVisible(true);
 	}
 

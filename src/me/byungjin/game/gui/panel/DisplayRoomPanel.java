@@ -39,6 +39,7 @@ public class DisplayRoomPanel extends MiniDialogPanel {
 		setLayout(new BorderLayout());
 		
 		JPanel header = new JPanel();
+		JPanel inner = new JPanel();
 		header.setLayout(new BorderLayout());
 		
 		JButton reloadBtn = new JButton("R");		
@@ -49,6 +50,7 @@ public class DisplayRoomPanel extends MiniDialogPanel {
 		reloadBtn.addActionListener(new ActionListener() {		
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				inner.removeAll();
 				reloadList();
 			}
 		});
@@ -66,7 +68,7 @@ public class DisplayRoomPanel extends MiniDialogPanel {
 		
 		add(header, BorderLayout.NORTH);
 		
-		JPanel inner = new JPanel();
+		
 		inner.setLayout(null);
 		inner.setBackground(Color.white);
 		inner.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));

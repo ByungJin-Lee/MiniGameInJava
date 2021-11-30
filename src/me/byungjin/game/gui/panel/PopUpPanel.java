@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 import me.byungjin.game.gui.MiniDialogPanel;
 import resource.ResourceLoader;
@@ -17,6 +18,7 @@ public class PopUpPanel extends MiniDialogPanel {
 		setBackground(Color.white);
 		
 		JLabel content = new JLabel(txt);
+		content.setHorizontalAlignment(SwingConstants.CENTER);
 		content.setFont(ResourceLoader.DEFAULT_FONT);
 		add(content);
 	}

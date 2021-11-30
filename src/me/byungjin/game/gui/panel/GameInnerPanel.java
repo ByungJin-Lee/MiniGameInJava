@@ -507,6 +507,9 @@ public class GameInnerPanel extends JPanel {
 		add(control_panel);
 		add(info_panel);
 				
+		meItem.removeAll();
+		clientItem.removeAll();
+		
 		setInfoSetting();
 		setControlSetting();
 		

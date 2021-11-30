@@ -93,11 +93,10 @@ public class CreateRoomPanel extends MiniDialogPanel {
 		warningsLabel.setFont(ResourceLoader.DEFAULT_FONT12);
 		warningsLabel.setForeground(Color.red);
 		
-		setLayout(new GridLayout(6, 1, 0, 5));
+		setLayout(new GridLayout(5, 1, 0, 5));
 		
 		add(title);
-		add(txt_name);
-		add(txt_password);
+		add(txt_name);		
 		add(game_kind);
 		add(createBtn);
 		add(warningsLabel);

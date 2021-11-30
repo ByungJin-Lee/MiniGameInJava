@@ -151,7 +151,7 @@ public class LoginPanel extends ChildPanel implements Runnable, MouseListener {
         String pw = pwField.getInnerText().trim();		
 
         if(id.length() < 10 || id.length() > 15 || pw.length() < 10 || pw.length() > 15) {
-            message("올바르지 않는 길이입니다.");
+            message("올바르지 않는 길이(10~15)");
             return;
         };
         message("");
@@ -173,7 +173,7 @@ public class LoginPanel extends ChildPanel implements Runnable, MouseListener {
         String pw = pwField.getInnerText().trim();		
 
         if(id.length() < 10 || id.length() > 15 || pw.length() < 10 || pw.length() > 15) {
-            message("올바르지 않는 길이입니다.");
+            message("올바르지 않는 길이(10~15)");
             return;
         };
         message("");
