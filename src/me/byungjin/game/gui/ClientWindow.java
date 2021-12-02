@@ -5,6 +5,7 @@ import me.byungjin.game.gui.panel.ChildPanel;
 import me.byungjin.game.gui.panel.ControlClientPanel;
 import me.byungjin.game.gui.panel.LoginPanel;
 import me.byungjin.network.Agent;
+import resource.ResourceLoader;
 
 import java.awt.*;
 
@@ -19,6 +20,7 @@ public class ClientWindow extends JFrame{
 	private ChildPanel mPanel;
 	
 	public ClientWindow() {	
+		setIconImage(ResourceLoader.ICON_APP.getImage());
 		setLocationRelativeTo(null);
 		setUndecorated(true);		
 
@@ -38,6 +40,7 @@ public class ClientWindow extends JFrame{
 				
 		mPanel.init();
 		setSize(getPreferredSize());
+		centerFrame();
 		setResizable(true);
 		setVisible(true);
 	}
@@ -47,7 +50,19 @@ public class ClientWindow extends JFrame{
 		mPanel = panel;
 		container.add(panel, BorderLayout.CENTER);
 		mPanel.init();
-		setSize(getPreferredSize());		
+		setSize(getPreferredSize());	
+		centerFrame();
+	}
+	
+	public void centerFrame() {
+		Dimension wS = getSize();
+        GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        Point center = g.getCenterPoint();
+
+        int dx = center.x - wS.width / 2;
+        int dy = center.y - wS.height / 2;   
+        
+        setLocation(dx, dy);
 	}
 	
 	public void setAgentToServer(Agent agent) {

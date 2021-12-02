@@ -24,6 +24,7 @@ import me.byungjin.game.gui.ClientWindow;
 import me.byungjin.game.gui.ConnectErrorDialog;
 import me.byungjin.game.gui.CreateRoomDialog;
 import me.byungjin.game.gui.DisplayRoomDialog;
+import me.byungjin.game.gui.PopUpDialog;
 import me.byungjin.game.gui.item.UserItem;
 import me.byungjin.game.gui.listener.MiniDialogWorkListener;
 import me.byungjin.game.omock.gui.OmokPanel;
@@ -485,14 +486,15 @@ public class GameInnerPanel extends JPanel {
 		JPanel panel = new OmokPanel(this.agentToHost, this.agentToServer, new GameEndEvent() {		
 			@Override
 			public void dispatch(GameKind kind, boolean win) {				
+				reset();
 				if(win) {
+					new PopUpDialog("You Win!");
 					rank.win();
 				}else {
+					new PopUpDialog("You Lose...");
 					rank.lose();
 				}
-				reset();
-				agentToServer.send(PROMISE.RANK_UPDATE, rank.toString());
-				
+				agentToServer.send(PROMISE.RANK_UPDATE, rank.toString());				
 			}
 		}); 
 		add(panel);
@@ -504,6 +506,7 @@ public class GameInnerPanel extends JPanel {
 	public void reset() {	
 		removeAll();
 		setSize(300,500);
+		setPreferredSize(new Dimension(300,500));
 		add(control_panel);
 		add(info_panel);
 				

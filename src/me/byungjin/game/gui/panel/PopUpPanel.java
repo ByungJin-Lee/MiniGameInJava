@@ -12,8 +12,7 @@ import resource.ResourceLoader;
 
 public class PopUpPanel extends MiniDialogPanel {
 	public PopUpPanel(String txt) {
-		setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
-		setLayout(new GridLayout(1, 1));
+		setBorder(BorderFactory.createEmptyBorder(20,20,20,20));		
 		
 		setBackground(Color.white);
 		

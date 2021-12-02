@@ -58,14 +58,12 @@ public class Omok extends Game {
 	 */
 	public void putWith() {
 		board.put(point.getX(), point.getY(), mine);
-		isWinOrLose(mine);
+		send(PROMISE.PUT, point.getX() + " " + point.getY());
 		turn = false;
-		
-		if(agent == null || !agent.isRunning()) {
-			endEvent.dispatch(GameKind.OMOK, true);
-		}
-		
-		send(PROMISE.PUT, point.getX() + " " + point.getY());		
+		if(isWinOrLose(mine) != -1)
+			return;		
+		if(agent == null || !agent.isRunning())
+			endEvent.dispatch(GameKind.OMOK, true);		
 	}	
 	/**
 	 * 돌을 놓지만 서버에는 전달하지 않음.		
@@ -175,11 +173,9 @@ public class Omok extends Game {
 			running = false;			
 			
 			if(mine == type) {
-				endEvent.dispatch(GameKind.OMOK, true);
-				new PopUpDialog("승리!");
+				endEvent.dispatch(GameKind.OMOK, true);				
 			}else {
-				endEvent.dispatch(GameKind.OMOK, false);
-				new PopUpDialog("패배!");
+				endEvent.dispatch(GameKind.OMOK, false);				
 			}
 			
 			return mine == type ? 1 : 0;

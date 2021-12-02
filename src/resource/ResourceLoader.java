@@ -29,6 +29,7 @@ public class ResourceLoader {
 	static public ImageIcon DEFAULT_USER;
 	static public Font H_FONT;
 	
+	static public ImageIcon ICON_APP;
 	static public ImageIcon ICON_MONITER;
 	static public ImageIcon ICON_MONITER_SELECTED;
 	static public ImageIcon ICON_LOG;
@@ -79,6 +80,7 @@ public class ResourceLoader {
 		ICON_SETTING_SELECTED = new ImageIcon(Toolkit.getDefaultToolkit().createImage(ResourceLoader.class.getResource("icons/icon_settings_full.png")).getScaledInstance(25, 25, Image.SCALE_SMOOTH));
 		ICON_SWITCH_ON= new ImageIcon(Toolkit.getDefaultToolkit().createImage(ResourceLoader.class.getResource("icons/icon_switch_on.png")).getScaledInstance(25, 25, Image.SCALE_SMOOTH));
 		ICON_SWITCH_OFF= new ImageIcon(Toolkit.getDefaultToolkit().createImage(ResourceLoader.class.getResource("icons/icon_switch_off.png")).getScaledInstance(25, 25, Image.SCALE_SMOOTH));
+		ICON_APP= new ImageIcon(ResourceLoader.class.getResource("game/diceIcon.png"));
 		SystemManager.message(ENVIRONMENT.RESOURCELOADER, "load Icons");
 	}	
 	static public void readOmokIcons() {
