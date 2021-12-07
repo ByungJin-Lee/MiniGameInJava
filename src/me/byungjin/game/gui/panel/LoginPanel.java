@@ -184,40 +184,36 @@ public class LoginPanel extends ChildPanel implements Runnable, MouseListener {
     public void initAgent() {
     	try {
 			this.agentToServer = NetworkManager.getClientToServer();
+			if(this.agentToServer == null) return;
+			this.agentToServer.start();    	    	
+			
+			this.agentToServer.addOtherComeInEvent(new DataComeInEvent() {
+				@Override
+				public void dispatch(Object source, String data) {
+					StringTokenizer tokens = new StringTokenizer(data);
+					switch(PROMISE.valueOf(tokens.nextToken())){
+					case LOGIN_SUC:
+						loginSuc();
+						break;
+					case LOGIN_FAIL:
+						loginFail();
+						break;
+					case REGISTER_SUC:
+						registerSuc();
+						break;
+					case REGISTER_FAIL:
+						registerFail();
+						break;
+					default:
+						break;
+					}
+				}
+			});    	
+			((ClientWindow)SwingUtilities.getWindowAncestor(this)).setAgentToServer(agentToServer);    	
 		} catch (Exception e) { 
 			SystemManager.catchException(ENVIRONMENT.CLIENT, e);
-			new ConnectErrorDialog();
-			checkAgent();
-		}
-    	
-    	if(this.agentToServer == null) return;
-    	this.agentToServer.start();    	
-    	System.out.println(this.agentToServer.isRunning());
-    	
-    	this.agentToServer.addOtherComeInEvent(new DataComeInEvent() {
-            @Override
-            public void dispatch(Object source, String data) {
-                StringTokenizer tokens = new StringTokenizer(data);
-                switch(PROMISE.valueOf(tokens.nextToken())){
-                    case LOGIN_SUC:
-                        loginSuc();
-                        break;
-                    case LOGIN_FAIL:
-                        loginFail();
-                        break;
-                    case REGISTER_SUC:
-                    	registerSuc();
-                    	break;
-                    case REGISTER_FAIL:
-                    	registerFail();
-                    	break;
-                    default:
-                        break;
-                }
-            }
-        });    	
-    	((ClientWindow)SwingUtilities.getWindowAncestor(this)).setAgentToServer(agentToServer);
-    	checkAgent();
+			new ConnectErrorDialog();			
+		}    	
     }
     
     public void registerSuc() {

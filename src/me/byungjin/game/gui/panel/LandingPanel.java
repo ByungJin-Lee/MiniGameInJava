@@ -21,8 +21,7 @@ public class LandingPanel extends ChildPanel {
 	@Override
 	public void init() {
 		DraggablePanel game = new DraggablePanel("Game", null);
-				
-		JPanel rank_inner = new JPanel();		
+						
 		
 		GameInnerPanel game_inner = new GameInnerPanel(getUser(), getAgentToServer(), game, this);
 		game_inner.setBackground(Color.white);
@@ -40,6 +39,7 @@ public class LandingPanel extends ChildPanel {
 			if(chat != null)
 				closeChat();
 			chat = new DraggablePanel("Chat", new ChatInnerPanel(toHost));
+			chat.setLocation(100,100);
 			add(chat);
 			revalidate();
 			repaint();

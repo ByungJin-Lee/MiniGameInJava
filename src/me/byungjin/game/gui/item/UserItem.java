@@ -1,6 +1,7 @@
 package me.byungjin.game.gui.item;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 
 import javax.swing.JLabel;
@@ -12,6 +13,7 @@ import resource.ResourceLoader;
 
 public class UserItem extends JPanel {
 	public UserItem(Rank rank) {
+		setBackground(Color.white);
 		setLayout(new BorderLayout());
 		JLabel imgLabel = new JLabel(ResourceLoader.DEFAULT_USER);
 		JLabel id_label = new JLabel(rank.getId());

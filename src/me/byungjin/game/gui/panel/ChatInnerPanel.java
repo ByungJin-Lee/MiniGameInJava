@@ -28,6 +28,7 @@ public class ChatInnerPanel extends JPanel {
 	private Vector<ChatItem> chats = new Vector<ChatItem>();
 	private Color bkColor = new Color(240,240,240);
 	private int chatY = 10;
+	private boolean mute = false;
 	private CustomScrollPane c_scroll;
 	final short LIMITE = 20;
 	
@@ -133,6 +134,16 @@ public class ChatInnerPanel extends JPanel {
 		
 		if(text.length() > LIMITE) return;		
 		
+		if(text.equals("mute")) {
+			mute = true;
+		}else if(text.equals("unmute")) {
+			mute = false;
+			return;
+		}				
+		
+		if(mute)
+			return;
+		
 		assignChats(new ChatItem(text, true, bkColor));
 		
 		input_area.setText("");
@@ -140,7 +151,11 @@ public class ChatInnerPanel extends JPanel {
 		this.agentToHost.chat(text);
 	}
 	
-	public void assignChats(ChatItem item) {		
+	public void assignChats(ChatItem item) {	
+		if(mute) {			
+			return;
+		}
+		
 		chats.add(item);		
 		
 		if(item.isMine()) {

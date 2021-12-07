@@ -41,9 +41,9 @@ public class GameInnerPanel extends JPanel {
 	private Agent agentToHost;
 	private Agent agentToServer;
 	private UserSchema client;
-	private DraggablePanel parent;
-	private boolean started = false;	
+	private DraggablePanel parent;	
 	private Rank rank;
+	private boolean isUser = false;
 	private JPanel control_panel;
 	private JPanel info_panel;	
 	private boolean search = true;
@@ -52,16 +52,15 @@ public class GameInnerPanel extends JPanel {
 	private Room curRoom;
 	private boolean host = false;
 	
-	private JPanel meItem, clientItem;
+	private JPanel clientItem;
 	
 	
 	public GameInnerPanel(UserSchema c, Agent server, DraggablePanel panel, LandingPanel landing) {
-		this.landing = landing;
-		meItem = new JPanel();
-		meItem.setBorder(null);
-		meItem.setLayout(new GridLayout(1,1));
+		setPreferredSize(new Dimension(300,500));
+		this.landing = landing;		
 		clientItem = new JPanel();
 		clientItem.setBorder(null);
+		clientItem.setBackground(Color.white);
 		clientItem.setLayout(new GridLayout(1,1));
 		
 		parent = panel;		
@@ -201,9 +200,8 @@ public class GameInnerPanel extends JPanel {
 						
 			if(retRank.getId().equals(client.getId())) {
 				rank = retRank;
-				setProfile(retRank, true);
 			}else {
-				setProfile(retRank, false);
+				setProfile(retRank);
 			}			
 						
 			break;
@@ -285,6 +283,7 @@ public class GameInnerPanel extends JPanel {
 			});			
 			agentToHost.start();			
 			displayRoomGUI(curRoom, true);
+			this.landing.openChat();
 		}catch(Exception e) {
 			SystemManager.catchException(ENVIRONMENT.CLIENT, e);
 			new ConnectErrorDialog();
@@ -297,16 +296,16 @@ public class GameInnerPanel extends JPanel {
 		switch(PROMISE.valueOf(tokens.nextToken())) {
 		case ROOM_ENTER:
 			getRank(tokens.nextToken(), kind);
+			isUser = true;
 			agentToHost.send(PROMISE.ROOM_ENTER_RETURN, client.getId());
 			break;		
 		case ROOM_ENTER_RETURN:
 			getRank(tokens.nextToken(), kind);
 			break;		
-		case ROOM_EXIT:
+		case ROOM_EXIT:			
 			exit();			
 			break;
-		case ROOM_START:
-			started = true;
+		case ROOM_START:			
 			switch(curRoom.getGameKind()) {
 			case OMOK:
 				setOmok();
@@ -324,17 +323,10 @@ public class GameInnerPanel extends JPanel {
 		
 	}
 	
-	public void setProfile(Rank r, boolean mine) {
-		System.out.println("dkdk");
-		if(mine) {
-			meItem.removeAll();
-			meItem.add(new UserItem(r));
-			meItem.repaint();
-		}else {
-			clientItem.removeAll();
-			clientItem.add(new UserItem(r));
-			clientItem.repaint();
-		}
+	public void setProfile(Rank r) {				
+		clientItem.removeAll();
+		clientItem.add(new UserItem(r));
+		clientItem.repaint();
 		revalidate();
 		repaint();
 	}
@@ -358,6 +350,7 @@ public class GameInnerPanel extends JPanel {
 			agentToHost.start();			
 			displayRoomGUI(info, false);
 			agentToHost.send(PROMISE.ROOM_ENTER, client.getId());
+			this.landing.openChat();
 		}catch(Exception e) {
 			SystemManager.catchException(ENVIRONMENT.CLIENT, e);
 			new ConnectErrorDialog();
@@ -370,6 +363,8 @@ public class GameInnerPanel extends JPanel {
 	}
 	
 	public void displayRoomGUI(Room room, boolean isHost) {
+		clientItem.removeAll();
+		
 		JLabel room_title = new JLabel("Room - " + room.getRoomName());
 		room_title.setFont(ResourceLoader.DEFAULT_FONT);
 		room_title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -391,9 +386,8 @@ public class GameInnerPanel extends JPanel {
 		//Player
 		JPanel player_list = new JPanel();		
 		player_list.setBackground(Color.white);
-		player_list.setLayout(new GridLayout(1, 2, 10, 0));
-		player_list.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
-		player_list.add(meItem);
+		player_list.setLayout(new GridLayout(1, 1, 10, 0));
+		player_list.setBorder(BorderFactory.createEmptyBorder(0, 40, 0, 40));		
 		player_list.add(clientItem);
 		
 		center.add(player_list);
@@ -422,10 +416,9 @@ public class GameInnerPanel extends JPanel {
 			btn_start.setText("Wait Host");
 		btn_start.addActionListener(new ActionListener() {			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(host) {
-					agentToHost.send(PROMISE.ROOM_START, "");
-					started = true;
+			public void actionPerformed(ActionEvent e) {				
+				if(host && isUser) {
+					agentToHost.send(PROMISE.ROOM_START, "");					
 					switch(room.getGameKind()) {
 					case OMOK:
 						setOmok();
@@ -467,6 +460,7 @@ public class GameInnerPanel extends JPanel {
 	
 	public void exit() {
 		this.landing.closeChat();
+		isUser = false;
 		
 		agentToHost.send(PROMISE.ROOM_EXIT, "");
 		
@@ -476,8 +470,7 @@ public class GameInnerPanel extends JPanel {
 		if(host)
 			this.agentToServer.send(PROMISE.ROOM_END, curRoom.getRoomName());
 		
-		setControlSetting();
-		started = false;
+		setControlSetting();		
 	}
 	
 	public void setOmok() {
@@ -498,6 +491,7 @@ public class GameInnerPanel extends JPanel {
 			}
 		}); 
 		add(panel);
+		setPreferredSize(panel.getSize());
 		setSize(panel.getSize());
 		parent.resize();
 		repaint();
@@ -505,20 +499,16 @@ public class GameInnerPanel extends JPanel {
 	
 	public void reset() {	
 		removeAll();
-		setSize(300,500);
-		setPreferredSize(new Dimension(300,500));
 		add(control_panel);
 		add(info_panel);
-				
-		meItem.removeAll();
-		clientItem.removeAll();
-		
+		setSize(300,500);
+		setPreferredSize(new Dimension(300,500));
+								
 		setInfoSetting();
 		setControlSetting();
 		
 		this.landing.closeChat();
-		
-		started = false;
+				
 		parent.resize();
 				
 		if(host)

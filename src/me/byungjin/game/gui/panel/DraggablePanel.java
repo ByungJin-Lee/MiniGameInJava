@@ -3,6 +3,7 @@ package me.byungjin.game.gui.panel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -56,7 +57,10 @@ public class DraggablePanel extends JPanel implements MouseMotionListener, Mouse
 	
 	public void resize() {
 		drag_control.setSize(panel.getWidth(), CONTROL_HEIGHT);
-		setSize(panel.getWidth() + 2, panel.getHeight() + CONTROL_HEIGHT);
+		setPreferredSize(new Dimension(panel.getPreferredSize().width + 2, panel.getPreferredSize().height + CONTROL_HEIGHT));				
+		setSize(getPreferredSize());		
+		revalidate();
+		repaint();
 	}
 	
 	@Override

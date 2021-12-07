@@ -93,15 +93,14 @@ public class ServerWindow extends JFrame {
 		panel_border.add(new MenuPanel(panel_banner, panel_inner), BorderLayout.WEST);
 		
 		setVisible(true);
-
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				stopDB();
-				stopServer();
-			}
-		});
-
+	}
+	
+	@Override
+	public void dispose() {
+		stopDB();
+		stopServer();
+		
+		super.dispose();
 	}
 	
 	public Agent getAgent(){
