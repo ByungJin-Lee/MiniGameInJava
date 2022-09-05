@@ -35,10 +35,8 @@
 |Server Program|서비스 제공 프로그램, DB 연결 및 로그인 인증 등 서비스 제공|
 
 ## 설계
----
 
 ### 스키마
----
 
 Log   
 
@@ -67,7 +65,7 @@ User Rank
 
 
 ### 내부 프로그램 분류
----
+   
 |분류|역할|
 |--|--|
 |SYSTEMMANAGER|	프로그램 시작점 및 다른 자원 관리|
@@ -80,7 +78,7 @@ User Rank
 |ROOMMANAGER|	Host가 생성한 Room 관리|
 
 ### 클래스 다이어그램
----
+   
 
 1. Network Class
 
@@ -119,7 +117,7 @@ User Rank
 ![Work Client7](./preview/GUI%20End%20Game.png)
 
 ### Commit Log
----
+   
 
 + 1.0.0
     + created Project
